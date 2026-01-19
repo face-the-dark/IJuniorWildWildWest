@@ -8,6 +8,7 @@ public class PlayerInputReader : MonoBehaviour
 
     public event Action<Vector2> Moved;
     public event Action<Vector2> Looked;
+    public event Action<Vector2, Vector2> MovedLooked;
     public event Action Aimed;
     public event Action Fired;
     
@@ -22,6 +23,7 @@ public class PlayerInputReader : MonoBehaviour
 
         _playerInput.Player.Move.performed += OnMove;
         _playerInput.Player.Move.canceled += OnMove;
+        _playerInput.Player.Move.performed += OnMoveLook;
         _playerInput.Player.Look.performed += OnLook;
         _playerInput.Player.Fire.performed += OnFire;
         _playerInput.Player.Aim.performed += OnAim;
@@ -31,6 +33,7 @@ public class PlayerInputReader : MonoBehaviour
     {
         _playerInput.Player.Move.performed -= OnMove;
         _playerInput.Player.Move.canceled -= OnMove;
+        _playerInput.Player.Move.canceled -= OnMoveLook;
         _playerInput.Player.Look.performed -= OnLook;
         _playerInput.Player.Fire.performed -= OnFire;
         _playerInput.Player.Aim.performed -= OnAim;
@@ -50,6 +53,14 @@ public class PlayerInputReader : MonoBehaviour
         Vector2 direction = context.ReadValue<Vector2>();
 
         Looked?.Invoke(direction);
+    }
+
+    private void OnMoveLook(InputAction.CallbackContext context)
+    {
+        Vector2 moveDirection = context.ReadValue<Vector2>();
+        Vector2 lookDirection = _playerInput.Player.Look.ReadValue<Vector2>();
+        
+        MovedLooked?.Invoke(moveDirection, lookDirection);
     }
 
     private void OnFire(InputAction.CallbackContext context)
