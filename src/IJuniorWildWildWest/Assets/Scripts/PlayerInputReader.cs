@@ -8,9 +8,8 @@ public class PlayerInputReader : MonoBehaviour
 
     public event Action<Vector2> Moved;
     public event Action<Vector2> Looked;
-    public event Action<Vector2, Vector2> MovedLooked;
-    public event Action Aimed;
-    public event Action Fired;
+    public event Action<bool> Aimed;
+    public event Action<bool> Shoot;
     
     private void Awake()
     {
@@ -23,20 +22,24 @@ public class PlayerInputReader : MonoBehaviour
 
         _playerInput.Player.Move.performed += OnMove;
         _playerInput.Player.Move.canceled += OnMove;
-        _playerInput.Player.Move.performed += OnMoveLook;
+        
         _playerInput.Player.Look.performed += OnLook;
-        _playerInput.Player.Fire.performed += OnFire;
+        _playerInput.Player.Shoot.performed += OnFire;
+        
         _playerInput.Player.Aim.performed += OnAim;
+        _playerInput.Player.Aim.canceled += OnAim;
     }
 
     private void OnDisable()
     {
         _playerInput.Player.Move.performed -= OnMove;
         _playerInput.Player.Move.canceled -= OnMove;
-        _playerInput.Player.Move.canceled -= OnMoveLook;
+        
         _playerInput.Player.Look.performed -= OnLook;
-        _playerInput.Player.Fire.performed -= OnFire;
+        _playerInput.Player.Shoot.performed -= OnFire;
+        
         _playerInput.Player.Aim.performed -= OnAim;
+        _playerInput.Player.Aim.canceled -= OnAim;
         
         _playerInput.Disable();
     }
@@ -55,21 +58,17 @@ public class PlayerInputReader : MonoBehaviour
         Looked?.Invoke(direction);
     }
 
-    private void OnMoveLook(InputAction.CallbackContext context)
-    {
-        Vector2 moveDirection = context.ReadValue<Vector2>();
-        Vector2 lookDirection = _playerInput.Player.Look.ReadValue<Vector2>();
-        
-        MovedLooked?.Invoke(moveDirection, lookDirection);
-    }
-
     private void OnFire(InputAction.CallbackContext context)
     {
-        Fired?.Invoke();        
+        bool isShoot = context.ReadValueAsButton();
+
+        Shoot?.Invoke(isShoot);        
     }
 
     private void OnAim(InputAction.CallbackContext context)
     {
-        Aimed?.Invoke();
+        bool isAimed = context.ReadValueAsButton();
+
+        Aimed?.Invoke(isAimed);
     }
 }
