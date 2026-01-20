@@ -4,7 +4,7 @@ public class DirectionCalculator : MonoBehaviour
 {
     [SerializeField] private Camera _mainCamera;
 
-    public Vector3 CalculateViewDirection(Vector3 inputDirection)
+    public Vector3 CalculateViewDirection(Vector2 inputDirection)
     {
         Vector3 direction = new Vector3(inputDirection.x, 0f, inputDirection.y);
 
