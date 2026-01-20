@@ -11,10 +11,8 @@ public class PlayerInputReader : MonoBehaviour
     public event Action<bool> Aimed;
     public event Action<bool> Shoot;
     
-    private void Awake()
-    {
+    private void Awake() => 
         _playerInput = new PlayerInput();
-    }
 
     private void OnEnable()
     {
