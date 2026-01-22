@@ -3,17 +3,17 @@
 public class PlayerRotator : MonoBehaviour
 {
     private const float Epsilon = 0.00001f;
-    
+
     [SerializeField] private float _speed = 10f;
     [SerializeField] private DirectionCalculator _directionCalculator;
     [SerializeField] private Camera _mainCamera;
 
     private PlayerInputReader _inputReader;
-    
+
     private Vector2 _direction;
     private bool _isAimed;
 
-    private void Awake() => 
+    private void Awake() =>
         _inputReader = GetComponent<PlayerInputReader>();
 
     private void OnEnable()
@@ -45,7 +45,7 @@ public class PlayerRotator : MonoBehaviour
     private void RotateAroundSelf()
     {
         Vector3 direction = _directionCalculator.CalculateViewDirection(_direction);
-        
+
         if (direction.sqrMagnitude > Epsilon)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
@@ -53,9 +53,9 @@ public class PlayerRotator : MonoBehaviour
         }
     }
 
-    private void SetDirection(Vector2 direction) => 
+    private void SetDirection(Vector2 direction) =>
         _direction = direction;
 
-    private void SetAimed(bool isAimed) => 
+    private void SetAimed(bool isAimed) =>
         _isAimed = isAimed;
 }

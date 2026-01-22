@@ -9,7 +9,7 @@ public class PlayerInputReader : MonoBehaviour
     public event Action<Vector2> Moved;
     public event Action<Vector2> Looked;
     public event Action<bool> Aimed;
-    public event Action<bool> Shoot;
+    public event Action Shoot;
     
     private void Awake() => 
         _playerInput = new PlayerInput();
@@ -22,7 +22,7 @@ public class PlayerInputReader : MonoBehaviour
         _playerInput.Player.Move.canceled += OnMove;
         
         _playerInput.Player.Look.performed += OnLook;
-        _playerInput.Player.Shoot.performed += OnFire;
+        _playerInput.Player.Shoot.performed += OnShoot;
         
         _playerInput.Player.Aim.performed += OnAim;
         _playerInput.Player.Aim.canceled += OnAim;
@@ -34,7 +34,7 @@ public class PlayerInputReader : MonoBehaviour
         _playerInput.Player.Move.canceled -= OnMove;
         
         _playerInput.Player.Look.performed -= OnLook;
-        _playerInput.Player.Shoot.performed -= OnFire;
+        _playerInput.Player.Shoot.performed -= OnShoot;
         
         _playerInput.Player.Aim.performed -= OnAim;
         _playerInput.Player.Aim.canceled -= OnAim;
@@ -56,11 +56,9 @@ public class PlayerInputReader : MonoBehaviour
         Looked?.Invoke(direction);
     }
 
-    private void OnFire(InputAction.CallbackContext context)
+    private void OnShoot(InputAction.CallbackContext context)
     {
-        bool isShoot = context.ReadValueAsButton();
-
-        Shoot?.Invoke(isShoot);        
+        Shoot?.Invoke();        
     }
 
     private void OnAim(InputAction.CallbackContext context)

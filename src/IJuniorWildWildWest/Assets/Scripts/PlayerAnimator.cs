@@ -7,6 +7,7 @@ public class PlayerAnimator : MonoBehaviour
     private static readonly int IsAiming = Animator.StringToHash("IsAiming");
     private static readonly int VerticalKey = Animator.StringToHash("Vertical");
     private static readonly int HorizontalKey = Animator.StringToHash("Horizontal");
+    private static readonly int ShootKey = Animator.StringToHash("Shoot");
 
     [SerializeField] private PlayerInputReader _inputReader;
     
@@ -15,21 +16,21 @@ public class PlayerAnimator : MonoBehaviour
     private Vector2 _direction;
     private bool _isAimed;
 
-    private void Awake()
-    {
+    private void Awake() => 
         _animator =  GetComponent<Animator>();
-    }
 
     private void OnEnable()
     {
         _inputReader.Moved += OnMoved;
         _inputReader.Aimed += OnAimed;
+        _inputReader.Shoot += OnShoot;
     }
 
     private void OnDisable()
     {
         _inputReader.Moved -= OnMoved;
         _inputReader.Aimed -= OnAimed;
+        _inputReader.Shoot -= OnShoot;
     }
 
     private void OnMoved(Vector2 direction)
@@ -45,6 +46,12 @@ public class PlayerAnimator : MonoBehaviour
         _animator.SetBool(IsAiming, isAimed);
         
         SwitchWalk();
+    }
+
+    private void OnShoot()
+    {
+        if (_isAimed)
+            _animator.SetTrigger(ShootKey);
     }
 
     private void SwitchWalk()
