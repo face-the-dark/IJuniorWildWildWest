@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputReader : MonoBehaviour
 {
-    private PlayerInput _playerInput;
+    private PlayerInput _input;
 
     public event Action<Vector2> Moved;
     public event Action<Vector2> Looked;
@@ -12,34 +12,34 @@ public class PlayerInputReader : MonoBehaviour
     public event Action Shoot;
     
     private void Awake() => 
-        _playerInput = new PlayerInput();
+        _input = new PlayerInput();
 
     private void OnEnable()
     {
-        _playerInput.Enable();
+        _input.Enable();
 
-        _playerInput.Player.Move.performed += OnMove;
-        _playerInput.Player.Move.canceled += OnMove;
+        _input.Player.Move.performed += OnMove;
+        _input.Player.Move.canceled += OnMove;
         
-        _playerInput.Player.Look.performed += OnLook;
-        _playerInput.Player.Shoot.performed += OnShoot;
+        _input.Player.Look.performed += OnLook;
+        _input.Player.Shoot.performed += OnShoot;
         
-        _playerInput.Player.Aim.performed += OnAim;
-        _playerInput.Player.Aim.canceled += OnAim;
+        _input.Player.Aim.performed += OnAim;
+        _input.Player.Aim.canceled += OnAim;
     }
 
     private void OnDisable()
     {
-        _playerInput.Player.Move.performed -= OnMove;
-        _playerInput.Player.Move.canceled -= OnMove;
+        _input.Player.Move.performed -= OnMove;
+        _input.Player.Move.canceled -= OnMove;
         
-        _playerInput.Player.Look.performed -= OnLook;
-        _playerInput.Player.Shoot.performed -= OnShoot;
+        _input.Player.Look.performed -= OnLook;
+        _input.Player.Shoot.performed -= OnShoot;
         
-        _playerInput.Player.Aim.performed -= OnAim;
-        _playerInput.Player.Aim.canceled -= OnAim;
+        _input.Player.Aim.performed -= OnAim;
+        _input.Player.Aim.canceled -= OnAim;
         
-        _playerInput.Disable();
+        _input.Disable();
     }
 
     private void OnMove(InputAction.CallbackContext context)

@@ -26,7 +26,7 @@ public class PlayerMover : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector3 direction = _directionCalculator.CalculateViewDirection(_direction);
+        Vector3 direction = _directionCalculator.CalculateCameraViewDirection(_direction);
         direction *= _speed;
         
         _rigidbody.velocity = new Vector3(direction.x, _rigidbody.velocity.y, direction.z);

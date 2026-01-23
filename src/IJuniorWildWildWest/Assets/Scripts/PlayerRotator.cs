@@ -4,7 +4,7 @@ public class PlayerRotator : MonoBehaviour
 {
     private const float Epsilon = 0.00001f;
 
-    [SerializeField] private float _speed = 10f;
+    [SerializeField] private float _speed = 20f;
     [SerializeField] private DirectionCalculator _directionCalculator;
     [SerializeField] private Camera _mainCamera;
 
@@ -44,7 +44,7 @@ public class PlayerRotator : MonoBehaviour
 
     private void RotateAroundSelf()
     {
-        Vector3 direction = _directionCalculator.CalculateViewDirection(_direction);
+        Vector3 direction = _directionCalculator.CalculateCameraViewDirection(_direction);
 
         if (direction.sqrMagnitude > Epsilon)
         {
