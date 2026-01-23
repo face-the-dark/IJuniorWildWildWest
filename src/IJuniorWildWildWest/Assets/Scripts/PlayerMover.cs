@@ -4,7 +4,7 @@
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMover : MonoBehaviour
 {
-    [SerializeField] private float _speed = 350f;
+    [SerializeField] private float _speed = 1f;
     [SerializeField] private DirectionCalculator _directionCalculator;
 
     private PlayerInputReader _inputReader;
