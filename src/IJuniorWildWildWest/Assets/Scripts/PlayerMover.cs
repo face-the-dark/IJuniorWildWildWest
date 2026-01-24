@@ -29,7 +29,8 @@ public class PlayerMover : MonoBehaviour
         Vector3 direction = _directionCalculator.CalculateCameraViewDirection(_direction);
         direction *= _speed;
         
-        _rigidbody.velocity = new Vector3(direction.x, _rigidbody.velocity.y, direction.z);
+        Vector3 velocity = new Vector3(direction.x, _rigidbody.velocity.y, direction.z);
+        _rigidbody.velocity = Vector3.Lerp(_rigidbody.velocity, velocity, _speed);
     }
 
     private void SetDirection(Vector2 direction) => 

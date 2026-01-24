@@ -3,11 +3,11 @@
 [RequireComponent(typeof(Animator))]
 public class PlayerAnimator : MonoBehaviour
 {
-    private static readonly int IsWalkKey = Animator.StringToHash("IsWalk");
-    private static readonly int IsAiming = Animator.StringToHash("IsAiming");
+    private static readonly int IsRunKey = Animator.StringToHash("IsRun");
+    private static readonly int IsAimKey = Animator.StringToHash("IsAim");
     private static readonly int VerticalKey = Animator.StringToHash("Vertical");
     private static readonly int HorizontalKey = Animator.StringToHash("Horizontal");
-    private static readonly int ShootKey = Animator.StringToHash("Shoot");
+    private static readonly int FireKey = Animator.StringToHash("Fire");
 
     [SerializeField] private PlayerInputReader _inputReader;
     
@@ -43,7 +43,7 @@ public class PlayerAnimator : MonoBehaviour
     private void OnAimed(bool isAimed)
     {
         _isAimed = isAimed;
-        _animator.SetBool(IsAiming, isAimed);
+        _animator.SetBool(IsAimKey, isAimed);
         
         SwitchWalk();
     }
@@ -51,20 +51,20 @@ public class PlayerAnimator : MonoBehaviour
     private void OnShoot()
     {
         if (_isAimed)
-            _animator.SetTrigger(ShootKey);
+            _animator.SetTrigger(FireKey);
     }
 
     private void SwitchWalk()
     {
         if (_isAimed)
         {
-            _animator.SetBool(IsWalkKey, false);
+            _animator.SetBool(IsRunKey, false);
             _animator.SetFloat(HorizontalKey, _direction.x);
             _animator.SetFloat(VerticalKey, _direction.y);
         }
         else
         {
-            _animator.SetBool(IsWalkKey, _direction.x != 0 || _direction.y != 0);
+            _animator.SetBool(IsRunKey, _direction.x != 0 || _direction.y != 0);
         }
     }
 }
