@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class Heath : MonoBehaviour
+public class Health : MonoBehaviour
 {
     private const float MinValue = 0f;
     

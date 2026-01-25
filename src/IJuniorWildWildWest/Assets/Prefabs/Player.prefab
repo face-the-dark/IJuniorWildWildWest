@@ -991,7 +991,7 @@ Transform:
   - {fileID: 6887110330428204914}
   - {fileID: 5028932081213585805}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &7477027098376228469
 CapsuleCollider:
@@ -1100,7 +1100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26ac66f98eaf49c8b9ae5902e9dd8264, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 1
+  _speed: 4
   _directionCalculator: {fileID: 5755527273425006051}
 --- !u!114 &8270983949209541777
 MonoBehaviour:
