@@ -8,35 +8,42 @@ namespace PlayerComponents
     public class PlayerMover : MonoBehaviour
     {
         [SerializeField] private float _speed = 1f;
+        [SerializeField] private float _acceleration = 30f;
         [SerializeField] private DirectionCalculator _directionCalculator;
 
         private PlayerInputReader _inputReader;
         private Rigidbody _rigidbody;
-    
+
         private Vector2 _direction;
+        private Vector3 _currentVelocity;
+
+        public event Action<Vector3> NormalizedVelocityChanged;
 
         private void Awake()
         {
             _inputReader = GetComponent<PlayerInputReader>();
             _rigidbody = GetComponent<Rigidbody>();
         }
-    
-        private void OnEnable() => 
+
+        private void OnEnable() =>
             _inputReader.Moved += SetDirection;
 
-        private void OnDisable() => 
+        private void OnDisable() =>
             _inputReader.Moved -= SetDirection;
 
         private void FixedUpdate()
         {
             Vector3 direction = _directionCalculator.CalculateCameraViewDirection(_direction);
-            direction *= _speed;
-        
-            Vector3 velocity = new Vector3(direction.x, _rigidbody.velocity.y, direction.z);
-            _rigidbody.velocity = Vector3.Lerp(_rigidbody.velocity, velocity, _speed);
+            Vector3 targetVelocity = direction * _speed;
+            float acceleration = _acceleration * Time.fixedDeltaTime;
+
+            _currentVelocity = Vector3.MoveTowards(_currentVelocity, targetVelocity, acceleration);
+            _rigidbody.velocity = new Vector3(_currentVelocity.x, _rigidbody.velocity.y, _currentVelocity.z);
+
+            NormalizedVelocityChanged?.Invoke(_currentVelocity / _speed);
         }
 
-        private void SetDirection(Vector2 direction) => 
+        private void SetDirection(Vector2 direction) =>
             _direction = direction;
     }
 }

@@ -13,13 +13,15 @@ namespace PlayerComponents
         private static readonly int FireKey = Animator.StringToHash("Fire");
 
         [SerializeField] private PlayerInputReader _inputReader;
-        
+        [SerializeField] private PlayerMover _mover;
+
         private Animator _animator;
 
-        private Vector2 _direction;
+        private bool _isRun;
+        private Vector3 _velocity;
         private bool _isAimed;
 
-        private void Awake() => 
+        private void Awake() =>
             _animator = GetComponent<Animator>();
 
         private void OnEnable()
@@ -27,6 +29,8 @@ namespace PlayerComponents
             _inputReader.Moved += OnMoved;
             _inputReader.Aimed += OnAimed;
             _inputReader.Shoot += OnShoot;
+
+            _mover.NormalizedVelocityChanged += OnNormalizedVelocityChanged;
         }
 
         private void OnDisable()
@@ -34,21 +38,20 @@ namespace PlayerComponents
             _inputReader.Moved -= OnMoved;
             _inputReader.Aimed -= OnAimed;
             _inputReader.Shoot -= OnShoot;
+            
+            _mover.NormalizedVelocityChanged -= OnNormalizedVelocityChanged;
         }
 
         private void OnMoved(Vector2 direction)
         {
-            _direction = direction;
-            
-            SwitchWalk();
+            _isRun = direction != Vector2.zero;
+            _animator.SetBool(IsRunKey, _isRun);
         }
 
         private void OnAimed(bool isAimed)
         {
             _isAimed = isAimed;
             _animator.SetBool(IsAimKey, isAimed);
-        
-            SwitchWalk();
         }
 
         private void OnShoot()
@@ -57,23 +60,22 @@ namespace PlayerComponents
                 _animator.SetTrigger(FireKey);
         }
 
-        private void SwitchWalk()
+        private void OnNormalizedVelocityChanged(Vector3 velocity)
         {
-            if (_isAimed)
+            if (_isRun == false)
             {
-                SetParameters(false, _direction);
+                SetParameters(Vector2.zero);
             }
             else
             {
-                bool isRun = _direction.x != 0 || _direction.y != 0;
-                
-                SetParameters(isRun, Vector2.zero);
+                SetParameters(_isAimed
+                    ? new Vector2(velocity.x, velocity.z)
+                    : new Vector2(0, Mathf.Clamp(velocity.z, 0, velocity.z)));
             }
         }
 
-        private void SetParameters(bool isRun, Vector2 velocity)
+        private void SetParameters(Vector2 velocity)
         {
-            _animator.SetBool(IsRunKey, isRun);
             _animator.SetFloat(HorizontalKey, velocity.x);
             _animator.SetFloat(VerticalKey, velocity.y);
         }

@@ -991,7 +991,7 @@ Transform:
   - {fileID: 6887110330428204914}
   - {fileID: 5028932081213585805}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &7477027098376228469
 CapsuleCollider:
@@ -1172,6 +1172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 4082616218513167340}
+  _mover: {fileID: 8136949049235190419}
 --- !u!114 &8807373169484251288
 MonoBehaviour:
   m_ObjectHideFlags: 0

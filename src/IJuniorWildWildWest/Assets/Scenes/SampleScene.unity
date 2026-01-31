@@ -2969,6 +2969,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 8136949049235190419, guid: 5f9dcd056a8a89f4f9027febbb7fb865, type: 3}
+      propertyPath: _acceleration
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136949049235190419, guid: 5f9dcd056a8a89f4f9027febbb7fb865, type: 3}
+      propertyPath: _deceleration
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8270983949209541777, guid: 5f9dcd056a8a89f4f9027febbb7fb865, type: 3}
       propertyPath: _mainCamera
       value: 
