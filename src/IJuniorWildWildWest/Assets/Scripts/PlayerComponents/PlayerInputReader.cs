@@ -22,25 +22,27 @@ namespace PlayerComponents
 
             _input.Player.Move.performed += OnMove;
             _input.Player.Move.canceled += OnMove;
-        
-            _input.Player.Look.performed += OnLook;
-            _input.Player.Shoot.performed += OnShoot;
-        
+
             _input.Player.Aim.performed += OnAim;
             _input.Player.Aim.canceled += OnAim;
+
+            _input.Player.Shoot.performed += OnShoot;
+            
+            _input.Player.Look.performed += OnLook;
         }
 
         private void OnDisable()
         {
             _input.Player.Move.performed -= OnMove;
             _input.Player.Move.canceled -= OnMove;
-        
-            _input.Player.Look.performed -= OnLook;
-            _input.Player.Shoot.performed -= OnShoot;
-        
+
             _input.Player.Aim.performed -= OnAim;
             _input.Player.Aim.canceled -= OnAim;
-        
+
+            _input.Player.Shoot.performed -= OnShoot;
+            
+            _input.Player.Look.performed -= OnLook;
+            
             _input.Disable();
         }
 

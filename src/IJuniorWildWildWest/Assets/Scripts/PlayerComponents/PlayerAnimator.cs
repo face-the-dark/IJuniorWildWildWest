@@ -70,7 +70,8 @@ namespace PlayerComponents
             {
                 SetParameters(_isAimed
                     ? new Vector2(velocity.x, velocity.z)
-                    : new Vector2(0, Mathf.Clamp(velocity.z, 0, velocity.z)));
+                    : new Vector2(0, Mathf.Clamp(velocity.z, 0, velocity.z))
+                );
             }
         }
 

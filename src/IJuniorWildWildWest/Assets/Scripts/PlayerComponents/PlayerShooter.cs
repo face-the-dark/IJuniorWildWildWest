@@ -4,12 +4,11 @@ namespace PlayerComponents
 {
     public class PlayerShooter : MonoBehaviour
     {
-        private const float EdgeReduceModifier = 2f;
+        private const float ScreenEdgeReduceModifier = 2f;
     
         [SerializeField] private PlayerInputReader _playerInputReader;
         [SerializeField] private Camera _mainCamera;
-        [SerializeField] private LayerMask _enemyLayer;
-        [SerializeField] private float _damage = 10f;
+        [SerializeField] private Weapon _weapon;
 
         private bool _isAimed;
     
@@ -32,13 +31,10 @@ namespace PlayerComponents
         {
             if (_isAimed)
             {
-                Vector3 center = new Vector3(Screen.width / EdgeReduceModifier, Screen.height / EdgeReduceModifier, 0f);
-                Ray ray = _mainCamera.ScreenPointToRay(center);
+                Vector3 center = new Vector3(Screen.width / ScreenEdgeReduceModifier, 
+                    Screen.height / ScreenEdgeReduceModifier, 0f);
 
-                Physics.Raycast(ray, out RaycastHit hit, float.PositiveInfinity, _enemyLayer);
-
-                if (hit.collider && hit.collider.TryGetComponent(out Health health)) 
-                    health.TakeDamage(_damage);
+                _weapon.Fire(center);
             }
         }
     }
