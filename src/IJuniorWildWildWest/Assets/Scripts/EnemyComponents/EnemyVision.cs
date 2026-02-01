@@ -6,6 +6,8 @@ namespace EnemyComponents
 {
     public class EnemyVision : MonoBehaviour
     {
+        private const float HeadHeightOffset = 1.75f;
+        
         [SerializeField] private Transform _player;
         [SerializeField] private float _viewFieldDistance = 10f;
         [SerializeField] private float _distanceEpsilon = 1f;
@@ -15,9 +17,9 @@ namespace EnemyComponents
         private void Update()
         {
             Vector3 position =
-                new Vector3(transform.position.x, transform.position.y + 1.75f, transform.position.z);
+                new Vector3(transform.position.x, transform.position.y + HeadHeightOffset, transform.position.z);
             Vector3 playerPosition =
-                new Vector3(_player.position.x, _player.position.y + 1.75f, _player.position.z);
+                new Vector3(_player.position.x, _player.position.y + HeadHeightOffset, _player.position.z);
 
             Vector3 directionToPlayer = playerPosition - position;
 
