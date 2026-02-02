@@ -12,6 +12,7 @@ namespace PlayerComponents
         private static readonly int HorizontalKey = Animator.StringToHash("Horizontal");
         private static readonly int FireKey = Animator.StringToHash("Fire");
         private static readonly int HitKey = Animator.StringToHash("Hit");
+        private static readonly int DeadKey = Animator.StringToHash("Dead");
 
         [SerializeField] private PlayerInputReader _inputReader;
         [SerializeField] private PlayerMover _mover;
@@ -35,6 +36,7 @@ namespace PlayerComponents
             _mover.NormalizedVelocityChanged += OnNormalizedVelocityChanged;
             
             _health.DamageTaken += OnDamageTaken;
+            _health.Died += OnDied;
         }
 
         private void OnDisable()
@@ -46,6 +48,7 @@ namespace PlayerComponents
             _mover.NormalizedVelocityChanged -= OnNormalizedVelocityChanged;
             
             _health.DamageTaken -= OnDamageTaken;
+            _health.Died -= OnDied;
         }
 
         private void OnMoved(Vector2 direction)
@@ -83,6 +86,9 @@ namespace PlayerComponents
 
         private void OnDamageTaken(float healthCurrentValue) => 
             _animator.SetTrigger(HitKey);
+
+        private void OnDied() => 
+            _animator.SetTrigger(DeadKey);
 
         private void SetParameters(Vector2 velocity)
         {

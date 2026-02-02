@@ -9,6 +9,7 @@ namespace EnemyComponents
     {
         private static readonly int IsVelocityKey = Animator.StringToHash("Velocity");
         private static readonly int HitKey = Animator.StringToHash("Hit");
+        private static readonly int DeadKey = Animator.StringToHash("Dead");
 
         private Animator _animator;
         private EnemyMover _mover;
@@ -24,16 +25,26 @@ namespace EnemyComponents
         private void OnEnable()
         {
             _mover.VelocityChanged += OnVelocityChanged;
+            
             _health.DamageTaken += OnDamageTaken;
+            _health.Died += OnDied;
         }
 
-        private void OnDisable() => 
+        private void OnDisable()
+        {
             _mover.VelocityChanged -= OnVelocityChanged;
+            
+            _health.DamageTaken -= OnDamageTaken;
+            _health.Died -= OnDied;
+        }
 
         private void OnVelocityChanged(float velocity) =>
             _animator.SetFloat(IsVelocityKey, velocity);
 
         private void OnDamageTaken(float healthCurrentValue) => 
             _animator.SetTrigger(HitKey);
+
+        private void OnDied() => 
+            _animator.SetTrigger(DeadKey);
     }
 }
