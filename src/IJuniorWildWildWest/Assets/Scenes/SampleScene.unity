@@ -8921,6 +8921,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 4141673884887702575}
   _mover: {fileID: 8160016376281054544}
+  _health: {fileID: 8928492494827409244}
 --- !u!4 &6791883430396111025
 Transform:
   m_ObjectHideFlags: 0
