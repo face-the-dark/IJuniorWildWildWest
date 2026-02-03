@@ -31,6 +31,9 @@ public class Health : MonoBehaviour
         }
     }
 
+    public bool IsDead() => 
+        _currentValue <= MinValue;
+
     private void TryDead()
     {
         if (_isDead)

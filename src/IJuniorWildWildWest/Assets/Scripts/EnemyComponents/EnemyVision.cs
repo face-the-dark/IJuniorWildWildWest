@@ -1,5 +1,4 @@
-﻿using System;
-using PlayerComponents;
+﻿using PlayerComponents;
 using UnityEngine;
 
 namespace EnemyComponents
@@ -12,9 +11,7 @@ namespace EnemyComponents
         [SerializeField] private float _viewFieldDistance = 10f;
         [SerializeField] private float _distanceEpsilon = 1f;
 
-        public event Action PlayerMissed;
-
-        private void Update()
+        public bool IsMissedPlayer()
         {
             Vector3 position =
                 new Vector3(transform.position.x, transform.position.y + HeadHeightOffset, transform.position.z);
@@ -38,8 +35,7 @@ namespace EnemyComponents
             
             float distance = Vector3.Distance(playerPosition, position);
 
-            if (hasPlayerComponent == false || distance > _viewFieldDistance + _distanceEpsilon)
-                PlayerMissed?.Invoke();
+            return hasPlayerComponent == false || distance > _viewFieldDistance + _distanceEpsilon;
         }
     }
 }
