@@ -34,7 +34,7 @@ namespace Infrastructure
             Weapon weapon = CreatePlayerWeapon(player.RightHand, playerCamera.ShootPoint);
             LookTarget lookTarget = CreateLookTarget(mainCamera.transform);
 
-            player.Construct(mainCamera, weapon, lookTarget.transform);
+            player.Construct(mainCamera.transform, weapon, lookTarget.transform);
 
             return player;
         }

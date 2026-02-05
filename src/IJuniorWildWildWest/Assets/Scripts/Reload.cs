@@ -8,7 +8,7 @@ public class Reload
 
     private float _timesUp;
     
-    public bool Expired => _timesUp <= Time.time;
+    public bool IsExpired => _timesUp <= Time.time;
 
     public void Reset() => 
         _timesUp = Time.time + _value;

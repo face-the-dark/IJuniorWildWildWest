@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
 
-public class DirectionCalculator : MonoBehaviour
+public class DirectionCalculator
 {
-    private Camera _mainCamera;
+    private readonly Transform _mainCamera;
 
-    public void Construct(Camera mainCamera) => 
+    public DirectionCalculator(Transform mainCamera) => 
         _mainCamera = mainCamera;
 
     public Vector3 CalculateCameraViewDirection(Vector2 inputDirection)
     {
         Vector3 direction = new Vector3(inputDirection.x, 0f, inputDirection.y);
 
-        Vector3 cameraForward = _mainCamera.transform.forward;
-        Vector3 cameraRight = _mainCamera.transform.right;
+        Vector3 cameraForward = _mainCamera.forward;
+        Vector3 cameraRight = _mainCamera.right;
 
         cameraForward.y = 0f;
         cameraRight.y = 0f;

@@ -3,33 +3,26 @@ using UnityEngine;
 
 namespace PlayerComponents
 {
-    [RequireComponent(typeof(PlayerInputReader))]
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerMover : MonoBehaviour
     {
         [SerializeField] private float _speed = 1f;
         [SerializeField] private float _acceleration = 30f;
-        [SerializeField] private DirectionCalculator _directionCalculator;
 
-        private PlayerInputReader _inputReader;
         private Rigidbody _rigidbody;
+        private DirectionCalculator _directionCalculator;
 
         private Vector2 _direction;
         private Vector3 _currentVelocity;
 
         public event Action<Vector3> NormalizedVelocityChanged;
 
-        private void Awake()
+        public void Construct(DirectionCalculator directionCalculator)
         {
-            _inputReader = GetComponent<PlayerInputReader>();
+            _directionCalculator = directionCalculator;
+            
             _rigidbody = GetComponent<Rigidbody>();
         }
-
-        private void OnEnable() =>
-            _inputReader.Moved += SetDirection;
-
-        private void OnDisable() =>
-            _inputReader.Moved -= SetDirection;
 
         private void FixedUpdate()
         {
@@ -45,7 +38,7 @@ namespace PlayerComponents
             NormalizedVelocityChanged?.Invoke(localVelocity / _speed);
         }
 
-        private void SetDirection(Vector2 direction) =>
+        public void SetDirection(Vector2 direction) =>
             _direction = direction;
     }
 }

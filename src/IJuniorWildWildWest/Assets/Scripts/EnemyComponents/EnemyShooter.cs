@@ -16,7 +16,7 @@ namespace EnemyComponents
         {
             transform.LookAt(_player);
             
-            if (_reload.Expired)
+            if (_reload.IsExpired)
             {
                 Vector3 direction = _player.position - transform.position;
 

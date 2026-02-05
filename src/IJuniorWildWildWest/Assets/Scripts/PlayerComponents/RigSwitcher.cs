@@ -15,7 +15,6 @@ namespace PlayerComponents
         [SerializeField] private MultiAimConstraint _aimRigBody;
         [SerializeField] private MultiAimConstraint _aimRigRightHand;
 
-        private PlayerInputReader _playerInputReader;
         private bool _isAimed;
 
         public void Construct(Transform lookTarget)
@@ -26,23 +25,14 @@ namespace PlayerComponents
             GetComponent<RigBuilder>().Build();
         }
 
-        private void Awake() =>
-            _playerInputReader = GetComponent<PlayerInputReader>();
-
-        private void OnEnable() =>
-            _playerInputReader.Aimed += OnAimed;
-
-        private void OnDisable() =>
-            _playerInputReader.Aimed -= OnAimed;
-
-        private void OnAimed(bool isAimed)
+        public void UpdateAim(bool isAimed)
         {
             _isAimed = isAimed;
 
-            UpdateRigState();
+            UpdateRigsValues();
         }
 
-        private void UpdateRigState()
+        private void UpdateRigsValues()
         {
             if (_isAimed)
             {
