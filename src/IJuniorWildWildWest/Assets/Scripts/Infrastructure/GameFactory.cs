@@ -1,5 +1,6 @@
 ﻿using CameraComponents;
 using EnemyComponents;
+using Infrastructure.AssetManagement;
 using PlayerComponents;
 using UnityEngine;
 
@@ -7,8 +8,14 @@ namespace Infrastructure
 {
     public class GameFactory : MonoBehaviour
     {
-        private void Awake() => 
+        private AssetProvider _assetProvider;
+        
+        private void Awake()
+        {
+            _assetProvider = new AssetProvider();
+            
             Initialize();
+        }
 
         private void Initialize()
         {
@@ -20,16 +27,13 @@ namespace Infrastructure
 
         private Camera CreateMainCamera()
         {
-            Camera prefab = Resources.Load<Camera>("Camera/MainCamera");
-
-            return Instantiate(prefab);
+            return _assetProvider.Instantiate(AssetPath.MainCamera).GetComponent<Camera>();
         }
 
         private Player CreatePlayer(Vector3 spawnPosition, Camera mainCamera)
         {
-            Player prefab = Resources.Load<Player>("Player/Player");
-            Player player = Instantiate(prefab, spawnPosition, Quaternion.identity);
-            
+            Player player = _assetProvider.Instantiate(AssetPath.Player, spawnPosition).GetComponent<Player>();
+
             PlayerCamera playerCamera = CreatePlayerCamera(player, player.CameraTarget);
             Weapon weapon = CreatePlayerWeapon(player.RightHand, playerCamera.ShootPoint);
             LookTarget lookTarget = CreateLookTarget(mainCamera.transform);
@@ -39,44 +43,40 @@ namespace Infrastructure
             return player;
         }
 
-        private Weapon CreatePlayerWeapon(Transform rightHand, Transform shootPoint)
-        {
-            Weapon prefab = Resources.Load<Weapon>("Player/PlayerRifle");
-            Weapon weapon = Instantiate(prefab, rightHand);
-
-            weapon.Construct(shootPoint);
-
-            return weapon;
-        }
-
         private PlayerCamera CreatePlayerCamera(Player player, Transform cameraTarget)
         {
-            PlayerCamera prefab = Resources.Load<PlayerCamera>("Camera/PlayerCamera");
-            PlayerCamera playerCamera = Instantiate(prefab);
+            PlayerCamera playerCamera = _assetProvider.Instantiate(AssetPath.PlayerCamera).GetComponent<PlayerCamera>();
 
             playerCamera.Construct(player, cameraTarget);
 
             return playerCamera;
         }
 
-        private Enemy CreateEnemy(Vector3 spawnPosition, Transform player)
+        private Weapon CreatePlayerWeapon(Transform rightHand, Transform shootPoint)
         {
-            Enemy prefab = Resources.Load<Enemy>("Enemy/Enemy");
-            Enemy enemy = Instantiate(prefab, spawnPosition, Quaternion.identity);
+            Weapon weapon = _assetProvider.Instantiate(AssetPath.PlayerRifle, rightHand).GetComponent<Weapon>();
 
-            enemy.Construct(player);
+            weapon.Construct(shootPoint);
 
-            return enemy;
+            return weapon;
         }
-        
+
         private LookTarget CreateLookTarget(Transform mainCameraTransform)
         {
-            LookTarget prefab = Resources.Load<LookTarget>("Camera/LookTarget");
-            LookTarget lookTarget = Instantiate(prefab);
+            LookTarget lookTarget = _assetProvider.Instantiate(AssetPath.LookTarget).GetComponent<LookTarget>();
 
             lookTarget.Construct(mainCameraTransform);
 
             return lookTarget;
+        }
+
+        private Enemy CreateEnemy(Vector3 spawnPosition, Transform player)
+        {
+            Enemy enemy = _assetProvider.Instantiate(AssetPath.Enemy, spawnPosition).GetComponent<Enemy>();
+
+            enemy.Construct(player);
+
+            return enemy;
         }
     }
 }

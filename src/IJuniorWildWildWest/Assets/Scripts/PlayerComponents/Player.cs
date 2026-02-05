@@ -7,7 +7,9 @@ namespace PlayerComponents
     [RequireComponent(typeof(PlayerMover))]
     [RequireComponent(typeof(PlayerRotator))]
     [RequireComponent(typeof(PlayerShooter))]
+    [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(RigSwitcher))]
+    [RequireComponent(typeof(PlayerAnimator))]
     public class Player : MonoBehaviour, IDisposable
     {
         [SerializeField] private Transform _rightHand;
@@ -17,8 +19,11 @@ namespace PlayerComponents
         private PlayerMover _mover;
         private PlayerRotator _rotator;
         private PlayerShooter _shooter;
+        private Health _health;
         private DirectionCalculator _directionCalculator;
+
         private RigSwitcher _rigSwitcher;
+        private PlayerAnimator _animator;
 
         public Transform RightHand => _rightHand;
         public Transform CameraTarget => _cameraTarget;
@@ -26,6 +31,7 @@ namespace PlayerComponents
         public void Construct(Transform mainCamera, Weapon weapon, Transform lookTarget)
         {
             InitializeComponents();
+            SubscribeToComponentsEvents();
             ConstructComponents(mainCamera, weapon, lookTarget);
         }
 
@@ -35,18 +41,36 @@ namespace PlayerComponents
             _mover = GetComponent<PlayerMover>();
             _rotator = GetComponent<PlayerRotator>();
             _shooter = GetComponent<PlayerShooter>();
+            _health = GetComponent<Health>();
             _rigSwitcher = GetComponent<RigSwitcher>();
+            _animator = GetComponent<PlayerAnimator>();
+        }
 
+        private void SubscribeToComponentsEvents()
+        {
             _inputReader.Moved += OnMoved;
             _inputReader.Aimed += OnAimed;
             _inputReader.Shoot += OnShoot;
+
+            _mover.NormalizedVelocityChanged += OnNormalizedVelocityChanged;
+            
+            _health.DamageTaken += OnDamageTaken;
+            _health.Died += OnDied;
         }
 
-        public void Dispose()
+        public void Dispose() => 
+            UnsubscribeFromComponentsEvents();
+
+        private void UnsubscribeFromComponentsEvents()
         {
             _inputReader.Moved -= OnMoved;
             _inputReader.Aimed -= OnAimed;
             _inputReader.Shoot -= OnShoot;
+            
+            _mover.NormalizedVelocityChanged -= OnNormalizedVelocityChanged;
+            
+            _health.DamageTaken -= OnDamageTaken;
+            _health.Died -= OnDied;
         }
 
         private void ConstructComponents(Transform mainCamera, Weapon weapon, Transform lookTarget)
@@ -63,6 +87,7 @@ namespace PlayerComponents
         {
             _rotator.SetDirection(direction);
             _mover.SetDirection(direction);
+            _animator.UpdateRun(direction);
         }
 
         private void OnAimed(bool isAimed)
@@ -70,11 +95,22 @@ namespace PlayerComponents
             _rotator.SetAimed(isAimed);
             _shooter.SetAimed(isAimed);
             _rigSwitcher.UpdateAim(isAimed);
+            _animator.UpdateAim(isAimed);
         }
 
         private void OnShoot()
         {
             _shooter.Shoot();
+            _animator.Shoot();
         }
+
+        private void OnNormalizedVelocityChanged(Vector3 velocity) => 
+            _animator.UpdateVelocity(velocity);
+
+        private void OnDamageTaken(float currentHealthValue) => 
+            _animator.Hit();
+
+        private void OnDied() => 
+            _animator.Die();
     }
 }

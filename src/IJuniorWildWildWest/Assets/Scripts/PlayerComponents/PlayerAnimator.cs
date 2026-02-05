@@ -1,81 +1,53 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace PlayerComponents
 {
-    [RequireComponent(typeof(PlayerInputReader))]
-    [RequireComponent(typeof(PlayerMover))]
-    [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(Animator))]
     public class PlayerAnimator : MonoBehaviour
     {
         private static readonly int IsRunKey = Animator.StringToHash("IsRun");
         private static readonly int IsAimKey = Animator.StringToHash("IsAim");
-        private static readonly int VerticalKey = Animator.StringToHash("Vertical");
-        private static readonly int HorizontalKey = Animator.StringToHash("Horizontal");
+        private static readonly int VerticalVelocityKey = Animator.StringToHash("VerticalVelocity");
+        private static readonly int HorizontalVelocityKey = Animator.StringToHash("HorizontalVelocity");
         private static readonly int FireKey = Animator.StringToHash("Fire");
         private static readonly int HitKey = Animator.StringToHash("Hit");
         private static readonly int DeadKey = Animator.StringToHash("Dead");
-
-        private PlayerInputReader _inputReader;
-        private PlayerMover _mover;
-        private Health _health;
+        
         private Animator _animator;
-
+        
         private bool _isRun;
         private Vector3 _velocity;
         private bool _isAimed;
 
-        private void Awake()
-        {
-            _inputReader  = GetComponent<PlayerInputReader>();
-            _mover = GetComponent<PlayerMover>();
-            _health = GetComponent<Health>();
+        private void Awake() => 
             _animator = GetComponent<Animator>();
-        }
 
-        private void OnEnable()
-        {
-            _inputReader.Moved += OnMoved;
-            _inputReader.Aimed += OnAimed;
-            _inputReader.Shoot += OnShoot;
-
-            _mover.NormalizedVelocityChanged += OnNormalizedVelocityChanged;
-            
-            _health.DamageTaken += OnDamageTaken;
-            _health.Died += OnDied;
-        }
-
-        private void OnDisable()
-        {
-            _inputReader.Moved -= OnMoved;
-            _inputReader.Aimed -= OnAimed;
-            _inputReader.Shoot -= OnShoot;
-
-            _mover.NormalizedVelocityChanged -= OnNormalizedVelocityChanged;
-            
-            _health.DamageTaken -= OnDamageTaken;
-            _health.Died -= OnDied;
-        }
-
-        private void OnMoved(Vector2 direction)
+        public void UpdateRun(Vector2 direction)
         {
             _isRun = direction != Vector2.zero;
             _animator.SetBool(IsRunKey, _isRun);
         }
 
-        private void OnAimed(bool isAimed)
+        public void UpdateAim(bool isAimed)
         {
             _isAimed = isAimed;
             _animator.SetBool(IsAimKey, isAimed);
         }
 
-        private void OnShoot()
+        public void Shoot()
         {
             if (_isAimed)
                 _animator.SetTrigger(FireKey);
         }
 
-        private void OnNormalizedVelocityChanged(Vector3 velocity)
+        public void Hit() =>
+            _animator.SetTrigger(HitKey);
+
+        public void Die() =>
+            _animator.SetTrigger(DeadKey);
+
+        public void UpdateVelocity(Vector3 velocity)
         {
             if (_isRun == false)
             {
@@ -90,16 +62,10 @@ namespace PlayerComponents
             }
         }
 
-        private void OnDamageTaken(float healthCurrentValue) => 
-            _animator.SetTrigger(HitKey);
-
-        private void OnDied() => 
-            _animator.SetTrigger(DeadKey);
-
         private void SetParameters(Vector2 velocity)
         {
-            _animator.SetFloat(HorizontalKey, velocity.x);
-            _animator.SetFloat(VerticalKey, velocity.y);
+            _animator.SetFloat(HorizontalVelocityKey, velocity.x);
+            _animator.SetFloat(VerticalVelocityKey, velocity.y);
         }
     }
 }

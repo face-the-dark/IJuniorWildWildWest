@@ -6,7 +6,7 @@ namespace PlayerComponents
     {
         private const float Epsilon = 0.01f;
 
-        [SerializeField] private float _speed = 20f;
+        [SerializeField] private float _mouseSensitivity = 20f;
 
         private Transform _mainCamera;
         private DirectionCalculator _directionCalculator;
@@ -37,7 +37,7 @@ namespace PlayerComponents
         private void RotateSelf()
         {
             Quaternion targetRotation = Quaternion.Euler(0f, _mainCamera.eulerAngles.y, 0f);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _speed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _mouseSensitivity * Time.deltaTime);
         }
 
         private void RotateAroundSelf()
@@ -47,7 +47,7 @@ namespace PlayerComponents
             if (direction.sqrMagnitude > Epsilon)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _speed * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _mouseSensitivity * Time.deltaTime);
             }
         }
     }
