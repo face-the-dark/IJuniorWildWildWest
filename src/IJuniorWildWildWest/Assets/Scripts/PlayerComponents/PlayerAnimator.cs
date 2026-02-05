@@ -2,8 +2,10 @@
 
 namespace PlayerComponents
 {
-    [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(PlayerInputReader))]
     [RequireComponent(typeof(PlayerMover))]
+    [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(Animator))]
     public class PlayerAnimator : MonoBehaviour
     {
         private static readonly int IsRunKey = Animator.StringToHash("IsRun");
@@ -14,18 +16,22 @@ namespace PlayerComponents
         private static readonly int HitKey = Animator.StringToHash("Hit");
         private static readonly int DeadKey = Animator.StringToHash("Dead");
 
-        [SerializeField] private PlayerInputReader _inputReader;
-        [SerializeField] private PlayerMover _mover;
-        [SerializeField] private Health _health;
-
+        private PlayerInputReader _inputReader;
+        private PlayerMover _mover;
+        private Health _health;
         private Animator _animator;
 
         private bool _isRun;
         private Vector3 _velocity;
         private bool _isAimed;
 
-        private void Awake() =>
+        private void Awake()
+        {
+            _inputReader  = GetComponent<PlayerInputReader>();
+            _mover = GetComponent<PlayerMover>();
+            _health = GetComponent<Health>();
             _animator = GetComponent<Animator>();
+        }
 
         private void OnEnable()
         {

@@ -40,7 +40,9 @@ namespace PlayerComponents
             _currentVelocity = Vector3.MoveTowards(_currentVelocity, targetVelocity, acceleration);
             _rigidbody.velocity = new Vector3(_currentVelocity.x, _rigidbody.velocity.y, _currentVelocity.z);
 
-            NormalizedVelocityChanged?.Invoke(_currentVelocity / _speed);
+            Vector3 localVelocity = transform.InverseTransformDirection(_currentVelocity);
+            
+            NormalizedVelocityChanged?.Invoke(localVelocity / _speed);
         }
 
         private void SetDirection(Vector2 direction) =>

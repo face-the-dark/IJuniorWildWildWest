@@ -21,7 +21,14 @@ namespace EnemyComponents
 
         private StateMachine _stateMachine;
 
-        private void Start()
+        public void Construct(Transform player)
+        {
+            InitializeComponents();
+            ConstructComponents(player);
+            CreateStateMachine();
+        }
+
+        private void InitializeComponents()
         {
             _stateMachineFactory = GetComponent<EnemyStateMachineFactory>();
             _enemyMover = GetComponent<EnemyMover>();
@@ -29,7 +36,17 @@ namespace EnemyComponents
             _shooter = GetComponent<EnemyShooter>();
             _vision = GetComponent<EnemyVision>();
             _health = GetComponent<Health>();
-            
+        }
+
+        private void ConstructComponents(Transform player)
+        {
+            _shootPointsCalculator.Construct(player);
+            _shooter.Construct(player);
+            _vision.Construct(player);
+        }
+
+        private void CreateStateMachine()
+        {
             _stateMachine = _stateMachineFactory.Create
             (
                 _enemyMover,

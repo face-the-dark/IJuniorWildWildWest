@@ -6,10 +6,14 @@ namespace EnemyComponents
     public class EnemyVision : MonoBehaviour
     {
         private const float HeadHeightOffset = 1.75f;
-        
-        [SerializeField] private Transform _player;
+
         [SerializeField] private float _viewFieldDistance = 10f;
         [SerializeField] private float _distanceEpsilon = 1f;
+        
+        private Transform _player;
+
+        public void Construct(Transform player) => 
+            _player = player;
 
         public bool IsMissedPlayer()
         {

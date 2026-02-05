@@ -2,14 +2,24 @@ using UnityEngine;
 
 namespace PlayerComponents
 {
+    [RequireComponent(typeof(PlayerInputReader))]
     public class PlayerShooter : MonoBehaviour
     {
-        [SerializeField] private PlayerInputReader _playerInputReader;
-        [SerializeField] private Camera _mainCamera;
-        [SerializeField] private Weapon _weapon;
+        private Weapon _weapon;
+        private Camera _mainCamera;
+        private PlayerInputReader _playerInputReader;
 
         private bool _isAimed;
-    
+
+        public void Construct(Camera mainCamera, Weapon weapon)
+        {
+            _mainCamera = mainCamera;
+            _weapon = weapon;
+        }
+
+        private void Awake() => 
+            _playerInputReader = GetComponent<PlayerInputReader>();
+
         private void OnEnable()
         {
             _playerInputReader.Aimed += OnAimed;
@@ -27,10 +37,8 @@ namespace PlayerComponents
 
         private void Shoot()
         {
-            if (_isAimed)
-            {
+            if (_isAimed) 
                 _weapon.Fire(_mainCamera.transform.forward);
-            }
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using FSM;
-using UnityEngine;
 
 namespace EnemyComponents.FSM.States
 {
@@ -18,10 +17,7 @@ namespace EnemyComponents.FSM.States
             _shootPointsCalculator = shootPointsCalculator;
         }
 
-        public override void Enter()
-        {
-            Vector3 calculateNearShootPosition = _shootPointsCalculator.CalculateNearShootPosition();
-            _mover.MoveTo(calculateNearShootPosition);
-        }
+        public override void Enter() => 
+            _mover.MoveTo(_shootPointsCalculator.CalculateNearShootPosition());
     }
 }

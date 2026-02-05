@@ -4,16 +4,12 @@ namespace EnemyComponents.FSM.Transitions
 {
     public class ToDeadStateTransition : Transition
     {
-        private Health _health;
+        private readonly Health _health;
         
-        public ToDeadStateTransition(State nextState, Health health) : base(nextState)
-        {
+        public ToDeadStateTransition(State nextState, Health health) : base(nextState) => 
             _health = health;
-        }
 
-        protected override bool CanTransit()
-        {
-            return _health.IsDead();
-        }
+        protected override bool CanTransit() => 
+            _health.IsDead();
     }
 }

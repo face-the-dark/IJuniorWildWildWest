@@ -2,21 +2,29 @@
 
 namespace PlayerComponents
 {
+    [RequireComponent(typeof(PlayerInputReader))]
+    [RequireComponent(typeof(DirectionCalculator))]
     public class PlayerRotator : MonoBehaviour
     {
         private const float Epsilon = 0.00001f;
 
         [SerializeField] private float _speed = 20f;
-        [SerializeField] private DirectionCalculator _directionCalculator;
-        [SerializeField] private Camera _mainCamera;
 
+        private Camera _mainCamera;
         private PlayerInputReader _inputReader;
+        private DirectionCalculator _directionCalculator;
 
         private Vector2 _direction;
         private bool _isAimed;
 
-        private void Awake() =>
+        public void Construct(Camera mainCamera) => 
+            _mainCamera = mainCamera;
+
+        private void Awake()
+        {
             _inputReader = GetComponent<PlayerInputReader>();
+            _directionCalculator =  GetComponent<DirectionCalculator>();
+        }
 
         private void OnEnable()
         {

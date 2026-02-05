@@ -6,6 +6,9 @@ public class Weapon : MonoBehaviour
     [SerializeField] private Transform _shootPoint;
     [SerializeField] private LayerMask _targetLayer;
 
+    public void Construct(Transform shootPoint) => 
+        _shootPoint = shootPoint;
+
     public void Fire(Vector3 direction)
     {
         Ray ray = new Ray(_shootPoint.position, direction);

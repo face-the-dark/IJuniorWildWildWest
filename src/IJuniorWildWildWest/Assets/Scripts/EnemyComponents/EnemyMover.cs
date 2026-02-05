@@ -11,16 +11,12 @@ namespace EnemyComponents
 
         private NavMeshAgent _navMeshAgent;
 
-        private Coroutine _arrivalCoroutine;
         private float _lastVelocity;
 
-        public event Action Moving;
         public event Action<float> VelocityChanged;
 
-        private void Awake()
-        {
+        private void Awake() => 
             _navMeshAgent = GetComponent<NavMeshAgent>();
-        }
 
         private void Update()
         {
@@ -32,19 +28,12 @@ namespace EnemyComponents
             }
         }
 
-        public void MoveTo(Vector3 destination)
-        {
-            Moving?.Invoke();
-
+        public void MoveTo(Vector3 destination) => 
             _navMeshAgent.destination = destination;
-        }
 
-        public bool IsArrivedAtShootPoint()
-        {
-            return _navMeshAgent.pathPending == false
-                   && _navMeshAgent.hasPath == false
-                   && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance
-                   && _navMeshAgent.velocity.sqrMagnitude <= _distanceEpsilon;
-        }
+        public bool IsArrivedAtShootPoint() =>
+            _navMeshAgent.pathPending == false
+            && _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance
+            && _navMeshAgent.velocity.sqrMagnitude <= _distanceEpsilon;
     }
 }

@@ -8,8 +8,12 @@ namespace EnemyComponents
         private const float RadiusModifier = 2f;
         private const float PlayerHeadPositionOffest = 1.75f;
 
-        [SerializeField] private Transform _player;
         [SerializeField] private float _viewFieldDistance = 10f;
+        
+        private Transform _player;
+
+        public void Construct(Transform player) => 
+            _player = player;
 
         public Vector3 CalculateNearShootPosition()
         {
