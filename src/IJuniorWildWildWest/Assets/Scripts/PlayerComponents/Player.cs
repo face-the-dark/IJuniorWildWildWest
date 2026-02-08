@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace PlayerComponents
 {
@@ -10,7 +9,7 @@ namespace PlayerComponents
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(RigSwitcher))]
     [RequireComponent(typeof(PlayerAnimator))]
-    public class Player : MonoBehaviour, IDisposable
+    public class Player : MonoBehaviour
     {
         [SerializeField] private Transform _rightHand;
         [SerializeField] private Transform _cameraTarget;
@@ -58,7 +57,7 @@ namespace PlayerComponents
             _health.Died += OnDied;
         }
 
-        public void Dispose() => 
+        public void OnDestroy() => 
             UnsubscribeFromComponentsEvents();
 
         private void UnsubscribeFromComponentsEvents()
