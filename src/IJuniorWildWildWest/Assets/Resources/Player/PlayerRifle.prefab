@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2247980262222869074
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4620134244987731778}
+  m_Layer: 0
+  m_Name: GunSmokeFxSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4620134244987731778
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2247980262222869074}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0025000535, y: 0.035000093, z: 1.135}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5558947711742564335}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2451144283358979569
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,6 +126,7 @@ GameObject:
   - component: {fileID: 160974654275428666}
   - component: {fileID: 4686029032869609229}
   - component: {fileID: 129592623334970328}
+  - component: {fileID: 3275435666963519411}
   m_Layer: 0
   m_Name: PlayerRifle
   m_TagString: Untagged
@@ -116,6 +148,7 @@ Transform:
   m_Children:
   - {fileID: 6040345879411281753}
   - {fileID: 810833136323516349}
+  - {fileID: 4620134244987731778}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -174.037, y: -95.858, z: 87.64}
@@ -186,6 +219,21 @@ MonoBehaviour:
   _targetLayer:
     serializedVersion: 2
     m_Bits: 128
+--- !u!114 &3275435666963519411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4238440400227945269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 279e0375a7bc4ddb9ab90b7af2615fd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gunSmokeFxSpawnPoint: {fileID: 4620134244987731778}
+  _gunSmokeFx: {fileID: 198939385255438472, guid: 294dcb7f17d463547ac578472b10c38b, type: 3}
+  _bloodSplatFx: {fileID: 198919414240691190, guid: 582366dd04f1f604d8f75e4e55c89f3e, type: 3}
 --- !u!1 &8296332784630834551
 GameObject:
   m_ObjectHideFlags: 0
