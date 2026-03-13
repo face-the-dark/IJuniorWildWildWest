@@ -1,4 +1,5 @@
-﻿using EnemyComponents.FSM;
+﻿using System;
+using EnemyComponents.FSM;
 using FSM;
 using UnityEngine;
 
@@ -21,6 +22,8 @@ namespace EnemyComponents
 
         private StateMachine _stateMachine;
 
+        public event Action Died;
+
         public void Construct(Transform player)
         {
             InitializeComponents();
@@ -36,7 +39,12 @@ namespace EnemyComponents
             _shooter = GetComponent<EnemyShooter>();
             _vision = GetComponent<EnemyVision>();
             _health = GetComponent<Health>();
+
+            _health.Died += OnDied;
         }
+
+        private void OnDestroy() => 
+            _health.Died -= OnDied;
 
         private void ConstructComponents(Transform player)
         {
@@ -56,6 +64,9 @@ namespace EnemyComponents
                 _health
             );
         }
+
+        private void OnDied() => 
+            Died?.Invoke();
 
         private void Update() => 
             _stateMachine.Update();

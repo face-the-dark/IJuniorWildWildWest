@@ -1,4 +1,5 @@
-﻿using CameraComponents;
+﻿using System.Collections.Generic;
+using CameraComponents;
 using EnemyComponents;
 using Infrastructure.AssetManagement;
 using PlayerComponents;
@@ -9,31 +10,18 @@ namespace Infrastructure
     public class GameFactory : MonoBehaviour
     {
         private AssetProvider _assetProvider;
-        
+
         private void Awake()
         {
             _assetProvider = new AssetProvider();
-            
-            Initialize();
         }
 
-        private void Initialize()
+        public Player CreatePlayer(Vector3 spawnPosition)
         {
+            Player player = _assetProvider.Instantiate(AssetPath.Player, spawnPosition)
+                .GetComponent<Player>();
+
             Camera mainCamera = CreateMainCamera();
-            Player player = CreatePlayer(Vector3.zero, mainCamera);
-            
-            CreateEnemy(new Vector3(-20f, 0f, -5f), player.transform);
-        }
-
-        private Camera CreateMainCamera()
-        {
-            return _assetProvider.Instantiate(AssetPath.MainCamera).GetComponent<Camera>();
-        }
-
-        private Player CreatePlayer(Vector3 spawnPosition, Camera mainCamera)
-        {
-            Player player = _assetProvider.Instantiate(AssetPath.Player, spawnPosition).GetComponent<Player>();
-
             PlayerCamera playerCamera = CreatePlayerCamera(player, player.CameraTarget);
             Weapon weapon = CreatePlayerWeapon(player.RightHand, playerCamera.ShootPoint);
             LookTarget lookTarget = CreateLookTarget(mainCamera.transform);
@@ -41,6 +29,20 @@ namespace Infrastructure
             player.Construct(mainCamera.transform, weapon, lookTarget.transform);
 
             return player;
+        }
+
+        public Enemy CreateEnemy(Vector3 spawnPosition, Transform player)
+        {
+            Enemy enemy = _assetProvider.Instantiate(AssetPath.Enemy, spawnPosition).GetComponent<Enemy>();
+
+            enemy.Construct(player);
+
+            return enemy;
+        }
+
+        private Camera CreateMainCamera()
+        {
+            return _assetProvider.Instantiate(AssetPath.MainCamera).GetComponent<Camera>();
         }
 
         private PlayerCamera CreatePlayerCamera(Player player, Transform cameraTarget)
@@ -68,15 +70,6 @@ namespace Infrastructure
             lookTarget.Construct(mainCameraTransform);
 
             return lookTarget;
-        }
-
-        private Enemy CreateEnemy(Vector3 spawnPosition, Transform player)
-        {
-            Enemy enemy = _assetProvider.Instantiate(AssetPath.Enemy, spawnPosition).GetComponent<Enemy>();
-
-            enemy.Construct(player);
-
-            return enemy;
         }
     }
 }
