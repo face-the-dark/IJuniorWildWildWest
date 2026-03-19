@@ -1,4 +1,5 @@
-﻿using Spawners;
+﻿using System;
+using Spawners;
 using UnityEngine;
 
 public class WaveRunner : MonoBehaviour
@@ -10,8 +11,15 @@ public class WaveRunner : MonoBehaviour
     private Transform _player;
     private int _currentWave;
 
-    private void Awake() => 
+    public int WaveCount => _waveCount;
+    
+    public event Action<int> CountIncreased;
+
+    private void Awake()
+    {
         _currentWave = 1;
+        CountIncreased?.Invoke(_currentWave);
+    }
 
     private void OnEnable()
     {
@@ -37,6 +45,8 @@ public class WaveRunner : MonoBehaviour
         {
             _currentWave++;
             _enemySpawner.Spawn(_player);
+            
+            CountIncreased?.Invoke(_currentWave);
         }
     }
 }
