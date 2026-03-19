@@ -10,6 +10,6 @@ namespace EnemyComponents.FSM.Transitions
             _health = health;
 
         protected override bool CanTransit() => 
-            _health.IsDead();
+            _health.IsDead;
     }
 }

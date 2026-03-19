@@ -1009,7 +1009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b18b1853f24ad8bfeaf8113a83c7a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damage: 10
+  _damage: 2
   _shootPoint: {fileID: 6899377887335116715}
   _targetLayer:
     serializedVersion: 2

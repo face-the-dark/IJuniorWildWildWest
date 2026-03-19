@@ -22,7 +22,7 @@ namespace EnemyComponents
 
         private StateMachine _stateMachine;
 
-        public event Action Died;
+        public event Action<Enemy> Died;
 
         public void Construct(Transform player)
         {
@@ -66,7 +66,7 @@ namespace EnemyComponents
         }
 
         private void OnDied() => 
-            Died?.Invoke();
+            Died?.Invoke(this);
 
         private void Update() => 
             _stateMachine.Update();
