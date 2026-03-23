@@ -19,7 +19,7 @@ public class Weapon : MonoBehaviour
         
         Ray ray = new Ray(_shootPoint.position, direction);
         
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (Physics.Raycast(ray, out RaycastHit hit, float.PositiveInfinity, _targetLayer))
         {
             if (hit.collider && hit.collider.TryGetComponent(out Health health))
             {
