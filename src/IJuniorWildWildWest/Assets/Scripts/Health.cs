@@ -10,6 +10,8 @@ public class Health : MonoBehaviour
     private float _currentValue;
     private bool _isDead;
 
+    public float MaxValue => _maxValue;
+    
     public event Action<float> DamageTaken;
     public event Action Died;
 

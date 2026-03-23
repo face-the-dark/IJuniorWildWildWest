@@ -7,7 +7,7 @@ namespace UI
     {
         [SerializeField] private TextMeshProUGUI _text;
         [SerializeField] private WaveRunner _waveRunner;
-
+        
         private void OnEnable() => 
             _waveRunner.CountIncreased += OnCountIncreased;
 

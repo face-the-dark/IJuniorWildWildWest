@@ -13,6 +13,7 @@ namespace EnemyComponents.FSM
             ShootPointsCalculator shootPointsCalculator,
             EnemyShooter shooter,
             EnemyVision vision,
+            Collider collider,
             Health health
         )
         {
@@ -20,7 +21,7 @@ namespace EnemyComponents.FSM
 
             MoveState moveState = new MoveState(stateMachine, mover, shootPointsCalculator);
             AttackState attackState = new AttackState(stateMachine, shooter);
-            DeadState deadState = new DeadState(stateMachine);
+            DeadState deadState = new DeadState(stateMachine, collider);
 
             ToMoveStateTransition toMoveStateTransition = new ToMoveStateTransition(moveState, vision);
             ToAttackStateTransition toAttackStateTransition = new ToAttackStateTransition(attackState, mover);

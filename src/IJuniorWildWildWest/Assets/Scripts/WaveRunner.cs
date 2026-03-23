@@ -15,7 +15,7 @@ public class WaveRunner : MonoBehaviour
     
     public event Action<int> CountIncreased;
 
-    private void Awake()
+    private void Start()
     {
         _currentWave = 1;
         CountIncreased?.Invoke(_currentWave);

@@ -10,6 +10,7 @@ namespace EnemyComponents
     [RequireComponent(typeof(ShootPointsCalculator))]
     [RequireComponent(typeof(EnemyShooter))]
     [RequireComponent(typeof(EnemyVision))]
+    [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(Health))]
     public class Enemy : MonoBehaviour
     {
@@ -18,6 +19,7 @@ namespace EnemyComponents
         private ShootPointsCalculator _shootPointsCalculator;
         private EnemyShooter _shooter;
         private EnemyVision _vision;
+        private Collider _collider;
         private Health _health;
 
         private StateMachine _stateMachine;
@@ -38,6 +40,7 @@ namespace EnemyComponents
             _shootPointsCalculator = GetComponent<ShootPointsCalculator>();
             _shooter = GetComponent<EnemyShooter>();
             _vision = GetComponent<EnemyVision>();
+            _collider = GetComponent<Collider>();
             _health = GetComponent<Health>();
 
             _health.Died += OnDied;
@@ -61,6 +64,7 @@ namespace EnemyComponents
                 _shootPointsCalculator,
                 _shooter,
                 _vision,
+                _collider,
                 _health
             );
         }
