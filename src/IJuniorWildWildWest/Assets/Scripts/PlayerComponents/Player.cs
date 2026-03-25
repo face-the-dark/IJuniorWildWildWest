@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using CameraComponents;
+using Cinemachine;
+using UnityEngine;
 
 namespace PlayerComponents
 {
@@ -9,8 +11,10 @@ namespace PlayerComponents
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(RigSwitcher))]
     [RequireComponent(typeof(PlayerAnimator))]
+    [RequireComponent(typeof(PlayerAnimator))]
     public class Player : MonoBehaviour
     {
+        [SerializeField] private CinemachineVirtualCamera _winVirtualCamera;
         [SerializeField] private Transform _rightHand;
         [SerializeField] private Transform _cameraTarget;
 
@@ -18,6 +22,7 @@ namespace PlayerComponents
         private PlayerMover _mover;
         private PlayerRotator _rotator;
         private PlayerShooter _shooter;
+        private PlayerCamera _playerCamera;
         private Health _health;
         private DirectionCalculator _directionCalculator;
 
@@ -27,11 +32,16 @@ namespace PlayerComponents
         public Transform RightHand => _rightHand;
         public Transform CameraTarget => _cameraTarget;
 
-        public void Construct(Transform mainCamera, Weapon weapon, Transform lookTarget)
+        public bool IsDead => _health.IsDead;
+        public CinemachineVirtualCamera WinVirtualCamera => _winVirtualCamera;
+
+        public void Construct(Transform mainCamera, Weapon weapon, Transform lookTarget, PlayerCamera playerCamera)
         {
             InitializeComponents();
             SubscribeToComponentsEvents();
             ConstructComponents(mainCamera, weapon, lookTarget);
+            
+            _playerCamera = playerCamera;
         }
 
         private void InitializeComponents()
@@ -82,6 +92,14 @@ namespace PlayerComponents
             _rigSwitcher.Construct(lookTarget);
         }
 
+        public void Win()
+        {
+            _animator.Win();
+            _inputReader.Disable();
+            _rotator.Disable();
+            _playerCamera.SwitchToWinCamera();
+        }
+
         private void OnMoved(Vector2 direction)
         {
             _rotator.SetDirection(direction);
@@ -95,6 +113,7 @@ namespace PlayerComponents
             _shooter.SetAimed(isAimed);
             _rigSwitcher.UpdateAim(isAimed);
             _animator.UpdateAim(isAimed);
+            _playerCamera.SetCameraParameters(isAimed);
         }
 
         private void OnShoot()
@@ -109,7 +128,10 @@ namespace PlayerComponents
         private void OnDamageTaken(float currentHealthValue) => 
             _animator.Hit();
 
-        private void OnDied() => 
+        private void OnDied()
+        {
             _animator.Die();
+            _inputReader.Disable();
+        }
     }
 }

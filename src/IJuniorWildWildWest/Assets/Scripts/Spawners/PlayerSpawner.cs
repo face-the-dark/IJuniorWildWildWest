@@ -10,7 +10,7 @@ namespace Spawners
         [SerializeField] private Transform _playerSpawnPoint;
         [SerializeField] private GameFactory _gameFactory;
         
-        public event Action<Transform> PlayerSpawned;
+        public event Action<Player> PlayerSpawned;
 
         private void Start() => 
             Spawn();
@@ -19,7 +19,7 @@ namespace Spawners
         {
             Player player = _gameFactory.CreatePlayer(_playerSpawnPoint.position);
 
-            PlayerSpawned?.Invoke(player.transform);
+            PlayerSpawned?.Invoke(player);
         }
     }
 }

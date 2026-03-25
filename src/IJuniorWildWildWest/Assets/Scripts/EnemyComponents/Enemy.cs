@@ -1,6 +1,7 @@
 ﻿using System;
 using EnemyComponents.FSM;
 using FSM;
+using PlayerComponents;
 using UnityEngine;
 
 namespace EnemyComponents
@@ -10,6 +11,7 @@ namespace EnemyComponents
     [RequireComponent(typeof(ShootPointsCalculator))]
     [RequireComponent(typeof(EnemyShooter))]
     [RequireComponent(typeof(EnemyVision))]
+    [RequireComponent(typeof(EnemyAnimator))]
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(Health))]
     public class Enemy : MonoBehaviour
@@ -19,14 +21,17 @@ namespace EnemyComponents
         private ShootPointsCalculator _shootPointsCalculator;
         private EnemyShooter _shooter;
         private EnemyVision _vision;
+        private EnemyAnimator _animator;
         private Collider _collider;
         private Health _health;
 
         private StateMachine _stateMachine;
 
+        private Player _player;
+
         public event Action<Enemy> Died;
 
-        public void Construct(Transform player)
+        public void Construct(Player player)
         {
             InitializeComponents();
             ConstructComponents(player);
@@ -42,18 +47,23 @@ namespace EnemyComponents
             _vision = GetComponent<EnemyVision>();
             _collider = GetComponent<Collider>();
             _health = GetComponent<Health>();
+            _animator = GetComponent<EnemyAnimator>();
 
             _health.Died += OnDied;
         }
 
-        private void OnDestroy() => 
-            _health.Died -= OnDied;
-
-        private void ConstructComponents(Transform player)
+        private void OnDestroy()
         {
-            _shootPointsCalculator.Construct(player);
-            _shooter.Construct(player);
-            _vision.Construct(player);
+            _health.Died -= OnDied;
+        }
+
+        private void ConstructComponents(Player player)
+        {
+            _shootPointsCalculator.Construct(player.transform);
+            _shooter.Construct(player.transform);
+            _vision.Construct(player.transform);
+            
+            _player = player;
         }
 
         private void CreateStateMachine()
@@ -64,15 +74,17 @@ namespace EnemyComponents
                 _shootPointsCalculator,
                 _shooter,
                 _vision,
+                _animator,
                 _collider,
-                _health
+                _health,
+                _player
             );
         }
 
-        private void OnDied() => 
+        private void OnDied() =>
             Died?.Invoke(this);
 
-        private void Update() => 
+        private void Update() =>
             _stateMachine.Update();
     }
 }

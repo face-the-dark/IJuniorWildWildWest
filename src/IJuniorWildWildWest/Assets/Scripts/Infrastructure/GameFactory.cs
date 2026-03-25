@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using CameraComponents;
+﻿using CameraComponents;
+using Cinemachine;
 using EnemyComponents;
 using Infrastructure.AssetManagement;
 using PlayerComponents;
@@ -22,16 +22,16 @@ namespace Infrastructure
                 .GetComponent<Player>();
 
             Camera mainCamera = CreateMainCamera();
-            PlayerCamera playerCamera = CreatePlayerCamera(player, player.CameraTarget);
+            PlayerCamera playerCamera = CreatePlayerCamera(player.CameraTarget, player.WinVirtualCamera);
             Weapon weapon = CreatePlayerWeapon(player.RightHand, playerCamera.ShootPoint);
             LookTarget lookTarget = CreateLookTarget(mainCamera.transform);
 
-            player.Construct(mainCamera.transform, weapon, lookTarget.transform);
+            player.Construct(mainCamera.transform, weapon, lookTarget.transform, playerCamera);
 
             return player;
         }
 
-        public Enemy CreateEnemy(Vector3 spawnPosition, Transform player)
+        public Enemy CreateEnemy(Vector3 spawnPosition, Player player)
         {
             Enemy enemy = _assetProvider.Instantiate(AssetPath.Enemy, spawnPosition).GetComponent<Enemy>();
 
@@ -45,11 +45,11 @@ namespace Infrastructure
             return _assetProvider.Instantiate(AssetPath.MainCamera).GetComponent<Camera>();
         }
 
-        private PlayerCamera CreatePlayerCamera(Player player, Transform cameraTarget)
+        private PlayerCamera CreatePlayerCamera(Transform cameraTarget, CinemachineVirtualCamera winVirtualCamera)
         {
             PlayerCamera playerCamera = _assetProvider.Instantiate(AssetPath.PlayerCamera).GetComponent<PlayerCamera>();
 
-            playerCamera.Construct(player, cameraTarget);
+            playerCamera.Construct(cameraTarget, winVirtualCamera);
 
             return playerCamera;
         }

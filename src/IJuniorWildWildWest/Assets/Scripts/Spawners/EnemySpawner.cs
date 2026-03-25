@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using EnemyComponents;
 using Infrastructure;
+using PlayerComponents;
 using UnityEngine;
 
 namespace Spawners
@@ -18,13 +19,13 @@ namespace Spawners
         private void Awake() => 
             _spawnedEnemies = new List<Enemy>();
         
-        public void Spawn(Transform player)
+        public void Spawn(Player player)
         {
             for (int i = 0; i < _enemySpawnPoints.Count; i++)
                 Spawn(_enemySpawnPoints[i].position, player);
         }
 
-        private void Spawn(Vector3 spawnPosition, Transform player)
+        private void Spawn(Vector3 spawnPosition, Player player)
         {
             Enemy enemy = _gameFactory.CreateEnemy(spawnPosition, player);
             enemy.Died += OnDied;

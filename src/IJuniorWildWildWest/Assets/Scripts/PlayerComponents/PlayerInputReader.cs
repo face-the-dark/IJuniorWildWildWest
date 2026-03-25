@@ -45,6 +45,9 @@ namespace PlayerComponents
             
             _input.Disable();
         }
+        
+        public void Disable() => 
+            _input.Disable();
 
         private void OnMove(InputAction.CallbackContext context)
         {

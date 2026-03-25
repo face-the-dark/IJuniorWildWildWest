@@ -1,4 +1,5 @@
 ﻿using System;
+using PlayerComponents;
 using Spawners;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class WaveRunner : MonoBehaviour
     [SerializeField] private PlayerSpawner _playerSpawner;
     [SerializeField] private EnemySpawner _enemySpawner;
 
-    private Transform _player;
+    private Player _player;
     private int _currentWave;
 
     public int WaveCount => _waveCount;
@@ -33,7 +34,7 @@ public class WaveRunner : MonoBehaviour
         _enemySpawner.AllEnemiesDied -= OnAllEnemiesDied;
     }
     
-    private void OnPlayerSpawn(Transform player)
+    private void OnPlayerSpawn(Player player)
     {
         _player = player;
         _enemySpawner.Spawn(player);
@@ -47,6 +48,10 @@ public class WaveRunner : MonoBehaviour
             _enemySpawner.Spawn(_player);
             
             CountIncreased?.Invoke(_currentWave);
+        }
+        else
+        {
+            _player.Win();
         }
     }
 }

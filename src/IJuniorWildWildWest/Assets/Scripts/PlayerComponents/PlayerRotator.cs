@@ -13,19 +13,25 @@ namespace PlayerComponents
 
         private Vector2 _direction;
         private bool _isAimed;
+        private bool _isEnabled;
 
         public void Construct(Transform mainCamera, DirectionCalculator directionCalculator)
         {
             _mainCamera = mainCamera;
             _directionCalculator = directionCalculator;
+            
+            _isEnabled = true;
         }
 
         private void LateUpdate()
         {
-            if (_isAimed)
-                RotateSelf();
-            else
-                RotateAroundSelf();
+            if (_isEnabled)
+            {
+                if (_isAimed)
+                    RotateSelf();
+                else
+                    RotateAroundSelf();
+            }
         }
 
         public void SetDirection(Vector2 direction) =>
@@ -33,6 +39,9 @@ namespace PlayerComponents
 
         public void SetAimed(bool isAimed) =>
             _isAimed = isAimed;
+        
+        public void Disable() => 
+            _isEnabled = false; 
 
         private void RotateSelf()
         {

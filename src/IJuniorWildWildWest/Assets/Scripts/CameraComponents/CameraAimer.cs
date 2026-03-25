@@ -1,5 +1,4 @@
 using Cinemachine;
-using PlayerComponents;
 using UnityEngine;
 
 namespace CameraComponents
@@ -13,38 +12,37 @@ namespace CameraComponents
         [SerializeField] private float _aimCameraDistance = 1.2f;
         [SerializeField] private float _aimScreenX = 0.3f;
 
-        private PlayerInputReader _playerInputReader;
-
+        private CinemachineVirtualCamera _mainVirtualCamera;
+        private CinemachineVirtualCamera _winVirtualCamera;
         private CinemachineFramingTransposer _virtualCameraBody;
 
-        public void Construct(Player player, Transform cameraTarget)
+        public void Construct(Transform cameraTarget, CinemachineVirtualCamera winVirtualCamera)
         {
-            _playerInputReader = player.GetComponent<PlayerInputReader>();
+            _mainVirtualCamera = GetComponent<CinemachineVirtualCamera>();
+            _virtualCameraBody = _mainVirtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+            _winVirtualCamera = winVirtualCamera;
             
-            CinemachineVirtualCamera playerVirtualCamera = GetComponent<CinemachineVirtualCamera>();
-            _virtualCameraBody = playerVirtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
-            
-            playerVirtualCamera.Follow = cameraTarget;
-            playerVirtualCamera.LookAt = cameraTarget;
-            
-            _playerInputReader.Aimed += OnAimed;
+            _mainVirtualCamera.Follow = cameraTarget;
+            _mainVirtualCamera.LookAt = cameraTarget;
         }
 
-        private void OnDisable() =>
-            _playerInputReader.Aimed -= OnAimed;
-
-        private void OnAimed(bool isAimed)
+        public void SetCameraParameters(bool isAimed)
         {
             if (isAimed)
                 SetCameraParameters(_aimCameraDistance, _aimScreenX);
             else
                 SetCameraParameters(_normalCameraDistance, _normalScreenX);
         }
-
+        
         private void SetCameraParameters(float cameraDistance, float screenX)
         {
             _virtualCameraBody.m_CameraDistance = cameraDistance;
             _virtualCameraBody.m_ScreenX = screenX;
+        }
+
+        public void SwitchToWinCamera()
+        {
+            _winVirtualCamera.Priority += 2;
         }
     }
 }

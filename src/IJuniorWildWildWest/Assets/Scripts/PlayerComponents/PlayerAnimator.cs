@@ -13,7 +13,8 @@ namespace PlayerComponents
         private static readonly int FireKey = Animator.StringToHash("Fire");
         private static readonly int HitKey = Animator.StringToHash("Hit");
         private static readonly int DeadKey = Animator.StringToHash("Dead");
-        
+        private static readonly int VictoryKey = Animator.StringToHash("Victory");
+
         private Animator _animator;
         
         private bool _isRun;
@@ -46,6 +47,9 @@ namespace PlayerComponents
 
         public void Die() =>
             _animator.SetTrigger(DeadKey);
+
+        public void Win() => 
+            _animator.SetTrigger(VictoryKey);
 
         public void UpdateVelocity(Vector3 velocity)
         {

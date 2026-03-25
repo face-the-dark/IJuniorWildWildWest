@@ -10,6 +10,7 @@ namespace EnemyComponents
         private static readonly int IsVelocityKey = Animator.StringToHash("Velocity");
         private static readonly int HitKey = Animator.StringToHash("Hit");
         private static readonly int DeadKey = Animator.StringToHash("Dead");
+        private static readonly int VictoryKey = Animator.StringToHash("Victory");
 
         private Animator _animator;
         private EnemyMover _mover;
@@ -36,6 +37,11 @@ namespace EnemyComponents
             
             _health.DamageTaken -= OnDamageTaken;
             _health.Died -= OnDied;
+        }
+
+        public void PlayVictory()
+        {
+            _animator.SetTrigger(VictoryKey);
         }
 
         private void OnVelocityChanged(float velocity) =>

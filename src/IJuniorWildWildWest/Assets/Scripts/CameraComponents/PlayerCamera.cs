@@ -1,4 +1,4 @@
-﻿using PlayerComponents;
+﻿using Cinemachine;
 using UnityEngine;
 
 namespace CameraComponents
@@ -12,10 +12,16 @@ namespace CameraComponents
 
         public Transform ShootPoint => _shootPoint;
         
-        public void Construct(Player player, Transform cameraTarget)
+        public void Construct(Transform cameraTarget, CinemachineVirtualCamera winVirtualCamera)
         {
             _cameraAimer = GetComponent<CameraAimer>();
-            _cameraAimer.Construct(player, cameraTarget);
+            _cameraAimer.Construct(cameraTarget, winVirtualCamera);
         }
+
+        public void SetCameraParameters(bool isAimed) => 
+            _cameraAimer.SetCameraParameters(isAimed);
+
+        public void SwitchToWinCamera() => 
+            _cameraAimer.SwitchToWinCamera();
     }
 }
