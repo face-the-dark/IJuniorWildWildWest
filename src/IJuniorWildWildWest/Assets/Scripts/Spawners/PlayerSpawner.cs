@@ -1,5 +1,6 @@
 ﻿using System;
 using Infrastructure;
+using Infrastructure.Factory;
 using PlayerComponents;
 using UnityEngine;
 

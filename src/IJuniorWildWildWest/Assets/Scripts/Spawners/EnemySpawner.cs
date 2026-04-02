@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using EnemyComponents;
 using Infrastructure;
+using Infrastructure.Factory;
 using PlayerComponents;
 using UnityEngine;
 

@@ -5,15 +5,15 @@ using Infrastructure.AssetManagement;
 using PlayerComponents;
 using UnityEngine;
 
-namespace Infrastructure
+namespace Infrastructure.Factory
 {
-    public class GameFactory : MonoBehaviour
+    public class GameFactory : IGameFactory
     {
-        private AssetProvider _assetProvider;
+        private readonly AssetProvider _assetProvider;
 
-        private void Awake()
+        public GameFactory(AssetProvider assetProvider)
         {
-            _assetProvider = new AssetProvider();
+            _assetProvider = assetProvider;
         }
 
         public Player CreatePlayer(Vector3 spawnPosition)
