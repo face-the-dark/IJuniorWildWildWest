@@ -1,0 +1,56 @@
+﻿using System;
+using UnityEngine;
+
+namespace Game.Gameplay.Features
+{
+    public class Health : MonoBehaviour
+    {
+        private const float MinValue = 0f;
+
+        [SerializeField] private float _maxValue = 100f;
+
+        private float _currentValue;
+        private bool _isDead;
+
+        public float MaxValue => _maxValue;
+    
+        public event Action<float> DamageTaken;
+        public event Action Died;
+
+        public bool IsDead => _isDead;
+
+        private void Start()
+        {
+            _currentValue = _maxValue;
+            _isDead = false;
+        }
+
+        public void TakeDamage(float damage)
+        {
+            if (_isDead)
+                return;
+
+            if (damage > 0)
+            {
+                _currentValue -= damage;
+
+                DamageTaken?.Invoke(_currentValue);
+
+                TryDead();
+            }
+        }
+
+        private void TryDead()
+        {
+            if (_isDead)
+                return;
+
+            if (_currentValue <= MinValue)
+            {
+                _isDead = true;
+
+                Died?.Invoke();
+            }
+        }
+    }
+}
