@@ -1,5 +1,4 @@
-﻿using Cinemachine;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game.Gameplay.Cameras
 {
@@ -12,10 +11,9 @@ namespace Game.Gameplay.Cameras
 
         public Transform ShootPoint => _shootPoint;
         
-        public void Construct(Transform cameraTarget, CinemachineVirtualCamera winVirtualCamera)
+        public void Awake()
         {
             _cameraAimer = GetComponent<CameraAimer>();
-            _cameraAimer.Construct(cameraTarget, winVirtualCamera);
         }
 
         public void SetCameraParameters(bool isAimed) => 

@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Game.Infrastructure.States.Factory;
 using Game.Infrastructure.States.StateInfrastructure;
 
 namespace Game.Infrastructure.States.StateMachine
 {
     public class GameStateMachine : IGameStateMachine
     {
-        private Dictionary<Type, IExitableState> _states = new();
-
-        private IExitableState _currentState;
+        private readonly IStateFactory _stateFactory;
         
-        public void RegisterStates(Dictionary<Type, IExitableState> states)
+        private IExitableState _currentState;
+
+        public GameStateMachine(IStateFactory stateFactory)
         {
-            foreach (KeyValuePair<Type, IExitableState> state in states)
-            {
-                _states.Add(state.Key, state.Value);
-            }
+            _stateFactory = stateFactory;
         }
 
         public void Enter<TState>() where TState : class, IState
@@ -34,13 +30,10 @@ namespace Game.Infrastructure.States.StateMachine
         {
             _currentState?.Exit();
 
-            TState state = GetState<TState>();
+            TState state = _stateFactory.GetState<TState>();
             _currentState = state;
 
             return state;
         }
-
-        private TState GetState<TState>() where TState : class, IExitableState =>
-            _states[typeof(TState)] as TState;
     }
 }

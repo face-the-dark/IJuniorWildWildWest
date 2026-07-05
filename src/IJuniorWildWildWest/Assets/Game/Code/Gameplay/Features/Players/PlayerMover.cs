@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using VContainer;
 
 namespace Game.Gameplay.Features.Players
 {
@@ -18,6 +19,7 @@ namespace Game.Gameplay.Features.Players
 
         public event Action<Vector3> NormalizedVelocityChanged;
 
+        [Inject]
         public void Construct(DirectionCalculator directionCalculator)
         {
             _directionCalculator = directionCalculator;

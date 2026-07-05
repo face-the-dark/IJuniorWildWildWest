@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Game.Gameplay.Cameras.Provider;
+using UnityEngine;
+using VContainer;
 
 namespace Game.Gameplay.Features.Players
 {
@@ -15,9 +17,10 @@ namespace Game.Gameplay.Features.Players
         private bool _isAimed;
         private bool _isEnabled;
 
-        public void Construct(Transform mainCamera, DirectionCalculator directionCalculator)
+        [Inject]
+        public void Construct(ICameraProvider cameraProvider, DirectionCalculator directionCalculator)
         {
-            _mainCamera = mainCamera;
+            _mainCamera = cameraProvider.MainCamera.transform;
             _directionCalculator = directionCalculator;
             
             _isEnabled = true;

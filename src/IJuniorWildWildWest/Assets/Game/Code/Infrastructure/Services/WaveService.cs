@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Game.Gameplay.Features.Enemies;
 using Game.Gameplay.Features.Players;
+using Game.Gameplay.Levels;
 using Game.Infrastructure.Factory;
 using Game.Infrastructure.States.GameStates;
 using Game.Infrastructure.States.StateMachine;
@@ -13,7 +14,7 @@ namespace Game.Infrastructure.Services
     {
         private readonly IGameFactory _factory;
         private readonly IGameStateMachine _stateMachine;
-        private readonly List<Transform> _enemySpawnPoints;
+        private readonly ILevelDataProvider _levelDataProvider;
 
         private readonly List<Enemy> _aliveEnemies = new();
         private Player _player;
@@ -23,14 +24,16 @@ namespace Game.Infrastructure.Services
 
         public event Action<string> WaveChanged;
 
-        public WaveService(
+        public WaveService
+        (
             IGameFactory factory,
             IGameStateMachine stateMachine,
-            List<Transform> enemySpawnPoints)
+            ILevelDataProvider levelDataProvider
+        )
         {
             _factory = factory;
             _stateMachine = stateMachine;
-            _enemySpawnPoints = enemySpawnPoints;
+            _levelDataProvider = levelDataProvider;
         }
 
         public void StartWave(Player player)
@@ -44,10 +47,10 @@ namespace Game.Infrastructure.Services
         private void SpawnEnemies()
         {
             _aliveEnemies.Clear();
-            
-            foreach (Transform point in _enemySpawnPoints)
+
+            foreach (Vector3 position in _levelDataProvider.EnemiesSpawnPositions)
             {
-                Enemy enemy = _factory.CreateEnemy(point.position, _player);
+                Enemy enemy = _factory.CreateEnemy(position);
                 enemy.Died += OnEnemyDied;
                 _aliveEnemies.Add(enemy);
             }

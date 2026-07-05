@@ -1,5 +1,7 @@
 using Cinemachine;
+using Game.Gameplay.Features.Players;
 using UnityEngine;
+using VContainer;
 
 namespace Game.Gameplay.Cameras
 {
@@ -16,14 +18,15 @@ namespace Game.Gameplay.Cameras
         private CinemachineVirtualCamera _winVirtualCamera;
         private CinemachineFramingTransposer _virtualCameraBody;
 
-        public void Construct(Transform cameraTarget, CinemachineVirtualCamera winVirtualCamera)
+        [Inject]
+        public void Construct(PlayerDataProvider playerDataProvider)
         {
             _mainVirtualCamera = GetComponent<CinemachineVirtualCamera>();
             _virtualCameraBody = _mainVirtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
-            _winVirtualCamera = winVirtualCamera;
+            _winVirtualCamera = playerDataProvider.PlayerCameraInfo.WinVirtualCamera;
             
-            _mainVirtualCamera.Follow = cameraTarget;
-            _mainVirtualCamera.LookAt = cameraTarget;
+            _mainVirtualCamera.Follow = playerDataProvider.PlayerCameraInfo.CameraTarget;
+            _mainVirtualCamera.LookAt = playerDataProvider.PlayerCameraInfo.CameraTarget;
         }
 
         public void SetCameraParameters(bool isAimed)

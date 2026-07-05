@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using VContainer;
 
 namespace Game.Gameplay.Features.Players
 {
@@ -17,10 +18,13 @@ namespace Game.Gameplay.Features.Players
 
         private bool _isAimed;
 
-        public void Construct(Transform lookTarget)
+        [Inject]
+        public void Construct(PlayerDataProvider playerDataProvider)
         {
-            _aimRigBody.data.sourceObjects = new WeightedTransformArray { new WeightedTransform(lookTarget, 1f) };
-            _aimRigRightHand.data.sourceObjects = new WeightedTransformArray { new WeightedTransform(lookTarget, 1f) };
+            _aimRigBody.data.sourceObjects = new WeightedTransformArray
+                { new WeightedTransform(playerDataProvider.LookTarget.transform, 1f) };
+            _aimRigRightHand.data.sourceObjects = new WeightedTransformArray
+                { new WeightedTransform(playerDataProvider.LookTarget.transform, 1f) };
 
             GetComponent<RigBuilder>().Build();
         }

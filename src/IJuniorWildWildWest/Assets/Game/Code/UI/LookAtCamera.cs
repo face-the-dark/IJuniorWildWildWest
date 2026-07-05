@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Game.Gameplay.Cameras.Provider;
+using UnityEngine;
+using VContainer;
 
 namespace Game.UI
 {
@@ -6,8 +8,11 @@ namespace Game.UI
     {
         private Camera _mainCamera;
 
-        private void Start() => 
-            _mainCamera = Camera.main;
+        [Inject]
+        public void Construct(ICameraProvider cameraProvider)
+        {
+            _mainCamera = cameraProvider.MainCamera;
+        }
 
         private void Update()
         {

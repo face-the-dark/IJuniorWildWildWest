@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Game.Gameplay.Cameras.Provider;
+using UnityEngine;
+using VContainer;
 
 namespace Game.Gameplay.Features
 {
@@ -6,12 +8,14 @@ namespace Game.Gameplay.Features
     {
         [SerializeField] private float _maxDistance = 100f;
     
-        private Transform _mainCameraTransform;
+        private ICameraProvider _cameraProvider;
 
-        public void Construct(Transform mainCameraTransform) => 
-            _mainCameraTransform = mainCameraTransform;
+        [Inject]
+        public void Construct(ICameraProvider cameraProvider) => 
+            _cameraProvider = cameraProvider;
 
         private void LateUpdate() => 
-            transform.position = _mainCameraTransform.position + _mainCameraTransform.forward * _maxDistance;
+            transform.position = _cameraProvider.MainCamera.transform.position 
+                                 + _cameraProvider.MainCamera.transform.forward * _maxDistance;
     }
 }

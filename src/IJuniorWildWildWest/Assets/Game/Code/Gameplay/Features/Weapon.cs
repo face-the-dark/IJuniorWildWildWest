@@ -1,5 +1,8 @@
 ﻿using System;
+using Game.Gameplay.Cameras;
+using Game.Gameplay.Features.Players;
 using UnityEngine;
+using VContainer;
 
 namespace Game.Gameplay.Features
 {
@@ -9,17 +12,21 @@ namespace Game.Gameplay.Features
         [SerializeField] private Transform _shootPoint;
         [SerializeField] private LayerMask _targetLayer;
     
+        private PlayerCamera _playerCamera;
+        
         public event Action Firing;
         public event Action<Vector3> Hit;
     
-        public void Construct(Transform shootPoint) => 
-            _shootPoint = shootPoint;
+        [Inject]
+        public void Construct(PlayerDataProvider playerDataProvider) => 
+            _playerCamera = playerDataProvider.PlayerCamera;
 
         public void Fire(Vector3 direction)
         {
             Firing?.Invoke();
-        
-            Ray ray = new Ray(_shootPoint.position, direction);
+
+            Vector3 shootPoint = _shootPoint ? _shootPoint.position : _playerCamera.ShootPoint.position;
+            Ray ray = new Ray(shootPoint, direction);
         
             if (Physics.Raycast(ray, out RaycastHit hit, float.PositiveInfinity, _targetLayer))
             {

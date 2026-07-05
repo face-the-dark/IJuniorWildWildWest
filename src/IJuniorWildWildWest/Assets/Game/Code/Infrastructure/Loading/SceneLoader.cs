@@ -2,9 +2,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Game.Infrastructure
+namespace Game.Infrastructure.Loading
 {
-    public class SceneLoader
+    public class SceneLoader : ISceneLoader
     {
         public async UniTask Load(string sceneName)
         {

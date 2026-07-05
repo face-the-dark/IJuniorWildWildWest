@@ -33,10 +33,10 @@ namespace Game.Gameplay.Features.Enemies
         public event Action<Enemy> Died;
 
         [Inject]
-        public void Construct(Player player)
+        public void Construct(PlayerDataProvider playerDataProvider)
         {
             InitializeComponents();
-            ConstructComponents(player);
+            ConstructComponents(playerDataProvider.Player);
             CreateStateMachine();
         }
 

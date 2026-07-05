@@ -1,79 +1,79 @@
-﻿using Cinemachine;
-using Game.Gameplay.Cameras;
+﻿using Game.Gameplay.Cameras;
 using Game.Gameplay.Features;
 using Game.Gameplay.Features.Enemies;
 using Game.Gameplay.Features.Players;
+using Game.Gameplay.Levels;
 using Game.Infrastructure.AssetManagement;
 using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
 namespace Game.Infrastructure.Factory
 {
     public class GameFactory : IGameFactory
     {
-        private readonly AssetProvider _assetProvider;
+        private readonly IObjectResolver _container;
+        private readonly IAssetProvider _assetProvider;
+        private readonly ILevelDataProvider _levelDataProvider;
+        private readonly PlayerDataProvider _playerDataProvider;
 
-        private Transform _playerSpawnPoint;
-
-        public GameFactory(AssetProvider assetProvider, Transform playerSpawnPoint)
+        public GameFactory(IObjectResolver container, IAssetProvider assetProvider,
+            ILevelDataProvider levelDataProvider, PlayerDataProvider playerDataProvider)
         {
+            _container = container;
             _assetProvider = assetProvider;
-            _playerSpawnPoint = playerSpawnPoint;
+            _levelDataProvider = levelDataProvider;
+            _playerDataProvider = playerDataProvider;
         }
 
         public Player CreatePlayer()
         {
-            Player player = _assetProvider.Instantiate(AssetPath.Player, _playerSpawnPoint)
-                .GetComponent<Player>();
+            Player player = _assetProvider.LoadAsset<Player>(AssetPath.Player);
+            
+            _playerDataProvider.Player = player;
 
-            Camera mainCamera = CreateMainCamera();
-            PlayerCamera playerCamera = CreatePlayerCamera(player.CameraTarget, player.WinVirtualCamera);
-            Weapon weapon = CreatePlayerWeapon(player.RightHand, playerCamera.ShootPoint);
-            LookTarget lookTarget = CreateLookTarget(mainCamera.transform);
-
-            player.Construct(mainCamera.transform, weapon, lookTarget.transform, playerCamera);
-
-            return player;
+            return _container.Instantiate(player, _levelDataProvider.PlayerSpawnPosition, Quaternion.identity);
         }
 
-        public Enemy CreateEnemy(Vector3 spawnPosition, Player player)
+        public Enemy CreateEnemy(Vector3 spawnPosition)
         {
-            Enemy enemy = _assetProvider.Instantiate(AssetPath.Enemy, spawnPosition).GetComponent<Enemy>();
+            Enemy enemy = _assetProvider.LoadAsset<Enemy>(AssetPath.Enemy);
 
-            enemy.Construct(player);
-
-            return enemy;
+            return _container.Instantiate(enemy, spawnPosition, Quaternion.identity);
         }
 
-        private Camera CreateMainCamera()
+        public PlayerCamera CreatePlayerCamera()
         {
-            return _assetProvider.Instantiate(AssetPath.MainCamera).GetComponent<Camera>();
+            PlayerCamera playerCamera = _assetProvider.LoadAsset<PlayerCamera>(AssetPath.PlayerCamera);
+
+            return _container.Instantiate(playerCamera);
         }
 
-        private PlayerCamera CreatePlayerCamera(Transform cameraTarget, CinemachineVirtualCamera winVirtualCamera)
+        public PlayerCameraInfo CreatePlayerCameraInfo()
         {
-            PlayerCamera playerCamera = _assetProvider.Instantiate(AssetPath.PlayerCamera).GetComponent<PlayerCamera>();
+            PlayerCameraInfo playerCameraInfo = _assetProvider.LoadAsset<PlayerCameraInfo>(AssetPath.PlayerCameraInfo);
 
-            playerCamera.Construct(cameraTarget, winVirtualCamera);
-
-            return playerCamera;
+            _playerDataProvider.PlayerCameraInfo = playerCameraInfo;
+            
+            return _container.Instantiate(playerCameraInfo);
         }
 
-        private Weapon CreatePlayerWeapon(Transform rightHand, Transform shootPoint)
+        public Weapon CreatePlayerWeapon()
         {
-            Weapon weapon = _assetProvider.Instantiate(AssetPath.PlayerRifle, rightHand).GetComponent<Weapon>();
+            Weapon weapon = _assetProvider.LoadAsset<Weapon>(AssetPath.PlayerRifle);
 
-            weapon.Construct(shootPoint);
-
-            return weapon;
+            _playerDataProvider.Weapon = weapon;
+            
+            return _container.Instantiate(weapon, _playerDataProvider.Player.RightHand);
         }
 
-        private LookTarget CreateLookTarget(Transform mainCameraTransform)
+        public LookTarget CreateLookTarget()
         {
-            LookTarget lookTarget = _assetProvider.Instantiate(AssetPath.LookTarget).GetComponent<LookTarget>();
+            LookTarget lookTarget = _assetProvider.LoadAsset<LookTarget>(AssetPath.LookTarget);
+            
+            _playerDataProvider.LookTarget = lookTarget;
 
-            lookTarget.Construct(mainCameraTransform);
-
-            return lookTarget;
+            return _container.Instantiate(lookTarget);
         }
     }
 }

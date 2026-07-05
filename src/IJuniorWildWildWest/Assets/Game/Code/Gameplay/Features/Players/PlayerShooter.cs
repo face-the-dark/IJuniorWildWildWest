@@ -1,4 +1,6 @@
+using Game.Gameplay.Cameras.Provider;
 using UnityEngine;
+using VContainer;
 
 namespace Game.Gameplay.Features.Players
 {
@@ -6,14 +8,15 @@ namespace Game.Gameplay.Features.Players
     public class PlayerShooter : MonoBehaviour
     {
         private Weapon _weapon;
-        private Transform _mainCamera;
+        private ICameraProvider _cameraProvider;
 
         private bool _isAimed;
 
-        public void Construct(Transform mainCamera, Weapon weapon)
+        [Inject]
+        public void Construct(ICameraProvider cameraProvider, PlayerDataProvider playerDataProvider)
         {
-            _mainCamera = mainCamera;
-            _weapon = weapon;
+            _cameraProvider = cameraProvider;
+            _weapon = playerDataProvider.Weapon;
         }
 
         public void SetAimed(bool isAimed) => 
@@ -22,7 +25,7 @@ namespace Game.Gameplay.Features.Players
         public void Shoot()
         {
             if (_isAimed) 
-                _weapon.Fire(_mainCamera.forward);
+                _weapon.Fire(_cameraProvider.MainCamera.transform.forward);
         }
     }
 }
